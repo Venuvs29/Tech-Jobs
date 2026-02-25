@@ -8,7 +8,7 @@
     <meta name="description" content="Precision-matched job discovery delivered daily at 9AM." />
     <link rel="stylesheet" href="design-system.css" />
     <style>
-        /* ── NAV ── */
+        /* NAV */
         .app-nav {
             position: sticky;
             top: 0;
@@ -34,10 +34,6 @@
             color: var(--color-text-primary);
             text-decoration: none;
             flex-shrink: 0;
-        }
-
-        .app-nav__brand:hover {
-            color: var(--color-text-primary);
         }
 
         .app-nav__links {
@@ -144,7 +140,7 @@
             border-left-color: var(--color-accent);
         }
 
-        /* ── FOOTER ── */
+        /* FOOTER */
         .app-footer {
             border-top: var(--border);
             background-color: var(--color-surface);
@@ -168,7 +164,7 @@
             color: var(--color-text-secondary);
         }
 
-        /* ── PAGE WRAPPERS ── */
+        /* PAGE */
         .page-wrap {
             max-width: var(--max-layout-width);
             margin: 0 auto;
@@ -205,13 +201,13 @@
             max-width: var(--max-text-width);
         }
 
-        /* ── FILTER BAR ── */
+        /* FILTER BAR */
         .filter-bar {
             background: var(--color-surface);
             border: var(--border);
             border-radius: var(--radius);
             padding: var(--space-2) var(--space-3);
-            margin-bottom: var(--space-3);
+            margin-bottom: var(--space-2);
             display: flex;
             flex-wrap: wrap;
             gap: var(--space-2);
@@ -222,12 +218,12 @@
             display: flex;
             flex-direction: column;
             gap: 6px;
-            min-width: 140px;
+            min-width: 130px;
             flex: 1;
         }
 
         .filter-group--wide {
-            min-width: 200px;
+            min-width: 180px;
             flex: 2;
         }
 
@@ -275,13 +271,7 @@
             pointer-events: none;
         }
 
-        .filter-bar__actions {
-            display: flex;
-            align-items: flex-end;
-            gap: var(--space-1);
-        }
-
-        /* ── JOB GRID ── */
+        /* JOB GRID */
         .job-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -295,7 +285,7 @@
             font-weight: 500;
         }
 
-        /* ── JOB CARD ── */
+        /* JOB CARD */
         .job-card {
             background: var(--color-surface);
             border: var(--border);
@@ -380,6 +370,7 @@
             gap: var(--space-1);
         }
 
+        /* SOURCE BADGE */
         .source-badge {
             font-size: 10px;
             font-weight: 600;
@@ -388,6 +379,8 @@
             padding: 2px 7px;
             border-radius: var(--radius-full);
             border: 1px solid transparent;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .source-badge--LinkedIn {
@@ -408,7 +401,121 @@
             border-color: #bbf7d0;
         }
 
-        /* ── EMPTY STATE ── */
+        /* SCORE BADGE */
+        .score-badge {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: var(--radius-full);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .score--high {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .score--mid {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+
+        .score--low {
+            background: #f3f4f6;
+            color: #4b5563;
+            border: 1px solid #e5e7eb;
+        }
+
+        .score--none {
+            background: #f9fafb;
+            color: #9ca3af;
+            border: 1px solid #f3f4f6;
+        }
+
+        /* MATCH TOGGLE */
+        .match-toggle-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-2);
+            padding: 10px var(--space-3);
+            background: var(--color-surface);
+            border: var(--border);
+            border-radius: var(--radius);
+        }
+
+        .match-toggle-label {
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
+            cursor: pointer;
+            font-size: var(--text-sm);
+            color: var(--color-text-primary);
+            font-weight: 500;
+            user-select: none;
+        }
+
+        .match-toggle-label input[type=checkbox] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .match-toggle-track {
+            width: 36px;
+            height: 20px;
+            background: var(--color-border);
+            border-radius: 10px;
+            position: relative;
+            transition: background-color var(--transition);
+            flex-shrink: 0;
+        }
+
+        .match-toggle-label input:checked+.match-toggle-track {
+            background: var(--color-accent);
+        }
+
+        .match-toggle-thumb {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform var(--transition);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+        }
+
+        .match-toggle-label input:checked+.match-toggle-track .match-toggle-thumb {
+            transform: translateX(16px);
+        }
+
+        /* NO PREFS BANNER */
+        .no-prefs-banner {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-3);
+            background: #fef9f0;
+            border: 1px solid #fde68a;
+            border-radius: var(--radius);
+            margin-bottom: var(--space-3);
+            font-size: var(--text-sm);
+            color: #92400e;
+            flex-wrap: wrap;
+        }
+
+        .no-prefs-banner__icon {
+            font-size: var(--text-base);
+            flex-shrink: 0;
+        }
+
+        /* EMPTY STATE */
         .empty-state {
             display: flex;
             flex-direction: column;
@@ -452,7 +559,7 @@
             max-width: 380px;
         }
 
-        /* ── MODAL ── */
+        /* MODAL */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -530,6 +637,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: var(--space-2);
+            align-items: center;
         }
 
         .modal__meta-item {
@@ -571,7 +679,7 @@
             justify-content: flex-end;
         }
 
-        /* ── LANDING ── */
+        /* LANDING */
         .landing {
             min-height: calc(100vh - var(--topbar-height) - 57px);
             display: flex;
@@ -639,7 +747,7 @@
             line-height: var(--leading-relaxed);
         }
 
-        /* ── SETTINGS ── */
+        /* SETTINGS */
         .settings-layout {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -653,112 +761,6 @@
             gap: var(--space-3);
         }
 
-        .ds-tag-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            padding: 8px var(--space-1);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius);
-            background: var(--color-surface);
-            min-height: 44px;
-            align-items: center;
-        }
-
-        .ds-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 3px 10px;
-            background: var(--color-bg);
-            border: var(--border);
-            border-radius: var(--radius-full);
-            font-size: var(--text-sm);
-            font-weight: 500;
-            color: var(--color-text-primary);
-        }
-
-        .ds-tag__remove {
-            font-size: 12px;
-            color: var(--color-text-secondary);
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            line-height: 1;
-        }
-
-        .ds-tag-placeholder {
-            font-size: var(--text-sm);
-            color: var(--color-text-placeholder);
-        }
-
-        .ds-mode-group {
-            display: flex;
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius);
-            overflow: hidden;
-        }
-
-        .ds-mode-option {
-            flex: 1;
-            padding: 10px var(--space-2);
-            font-size: var(--text-sm);
-            font-weight: 500;
-            text-align: center;
-            cursor: pointer;
-            background: var(--color-surface);
-            color: var(--color-text-secondary);
-            border: none;
-            border-right: var(--border);
-            transition: background-color var(--transition), color var(--transition);
-        }
-
-        .ds-mode-option:last-child {
-            border-right: none;
-        }
-
-        .ds-mode-option:hover {
-            background: var(--color-bg);
-            color: var(--color-text-primary);
-        }
-
-        .ds-mode-option.is-selected {
-            background: var(--color-accent-subtle);
-            color: var(--color-accent);
-            font-weight: 600;
-        }
-
-        .ds-level-group {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: var(--space-1);
-        }
-
-        .ds-level-option {
-            padding: var(--space-1);
-            font-size: var(--text-sm);
-            font-weight: 500;
-            text-align: center;
-            cursor: pointer;
-            background: var(--color-surface);
-            color: var(--color-text-secondary);
-            border: var(--border);
-            border-radius: var(--radius);
-            transition: background-color var(--transition), color var(--transition), border-color var(--transition);
-        }
-
-        .ds-level-option:hover {
-            border-color: var(--color-text-secondary);
-            color: var(--color-text-primary);
-        }
-
-        .ds-level-option.is-selected {
-            background: var(--color-accent-subtle);
-            color: var(--color-accent);
-            border-color: var(--color-accent);
-        }
-
         .settings-aside {
             display: flex;
             flex-direction: column;
@@ -767,14 +769,92 @@
             top: calc(var(--topbar-height) + var(--space-3));
         }
 
-        /* ── PROOF ── */
+        /* PREF - multiselect */
+        select[multiple].filter-input {
+            height: auto;
+            appearance: none;
+            background-image: none;
+        }
+
+        select[multiple].filter-input option:checked {
+            background: var(--color-accent-subtle);
+            color: var(--color-accent);
+        }
+
+        /* PREF - checkbox group */
+        .pref-checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+        }
+
+        .pref-checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: var(--text-sm);
+            color: var(--color-text-primary);
+        }
+
+        .pref-checkbox-item input[type=checkbox] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--color-accent);
+            cursor: pointer;
+        }
+
+        /* PREF - slider */
+        .pref-slider-wrap {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .pref-slider {
+            flex: 1;
+            appearance: none;
+            height: 4px;
+            background: var(--color-border);
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .pref-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--color-accent);
+            cursor: pointer;
+        }
+
+        .pref-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--color-accent);
+            cursor: pointer;
+            border: none;
+        }
+
+        .pref-slider-val {
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--color-text-primary);
+            min-width: 36px;
+            text-align: right;
+        }
+
+        /* PROOF */
         .proof-wrap {
             max-width: var(--max-layout-width);
             margin: 0 auto;
             padding: var(--space-4);
         }
 
-        /* ── 404 ── */
+        /* 404 */
         .notfound {
             min-height: calc(100vh - var(--topbar-height) - 57px);
             display: flex;
@@ -791,7 +871,6 @@
             font-weight: 700;
             color: var(--color-border);
             line-height: 1;
-            letter-spacing: -0.04em;
             margin-bottom: var(--space-2);
         }
 
@@ -810,7 +889,7 @@
             margin-bottom: var(--space-3);
         }
 
-        /* ── RESPONSIVE ── */
+        /* RESPONSIVE */
         @media(max-width:768px) {
 
             .settings-layout,
@@ -848,10 +927,6 @@
 
             .landing__headline {
                 font-size: var(--text-2xl);
-            }
-
-            .ds-level-group {
-                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -918,24 +993,24 @@
         </div>
     </div>
 
-    <!-- PROOF FOOTER -->
+    <!-- FOOTER -->
     <footer class="app-footer" role="contentinfo">
         <div class="app-footer__inner">
             <span class="app-footer__label">Build status</span>
             <div class="ds-checklist">
-                <span class="ds-checklist__item ds-checklist__item--done"><span class="ds-checklist__box"
-                        aria-hidden="true"></span>UI Built</span>
-                <span class="ds-checklist__item ds-checklist__item--done"><span class="ds-checklist__box"
-                        aria-hidden="true"></span>Logic Working</span>
-                <span class="ds-checklist__item"><span class="ds-checklist__box" aria-hidden="true"></span>Test
-                    Passed</span>
-                <span class="ds-checklist__item"><span class="ds-checklist__box"
-                        aria-hidden="true"></span>Deployed</span>
+                <span class="ds-checklist__item ds-checklist__item--done"><span class="ds-checklist__box"></span>UI
+                    Built</span>
+                <span class="ds-checklist__item ds-checklist__item--done"><span class="ds-checklist__box"></span>Data
+                    Layer</span>
+                <span class="ds-checklist__item ds-checklist__item--done"><span class="ds-checklist__box"></span>Match
+                    Engine</span>
+                <span class="ds-checklist__item"><span class="ds-checklist__box"></span>Deployed</span>
             </div>
         </div>
     </footer>
 
-    <!-- STATIC PAGE TEMPLATES -->
+    <!-- ═══════════ TEMPLATES ═══════════ -->
+
     <template id="tpl-home">
         <section class="landing" aria-labelledby="landing-h">
             <p class="landing__eyebrow">Job Notification Tracker</p>
@@ -953,8 +1028,8 @@
                     <p class="landing__prop-sub">One focused digest. No intraday noise.</p>
                 </div>
                 <div>
-                    <p class="landing__prop-label">Precision Filters</p>
-                    <p class="landing__prop-sub">Role, location, mode, level — all configurable.</p>
+                    <p class="landing__prop-label">Precision Matching</p>
+                    <p class="landing__prop-sub">Role, location, mode, level — scored deterministically.</p>
                 </div>
                 <div>
                     <p class="landing__prop-label">Save &amp; Track</p>
@@ -973,11 +1048,8 @@
             <h1 class="empty-state__heading">Your 9AM briefing.</h1>
             <p class="empty-state__sub">Every morning, a curated summary of the highest-match roles will be compiled
                 here — no noise, no duplicates.</p>
-            <div
-                style="margin-top:var(--space-2);display:flex;flex-direction:column;align-items:center;gap:var(--space-1);">
-                <a href="#/settings" class="ds-btn ds-btn--secondary">Set Preferences First</a>
-                <span class="ds-body-sm">Digest logic will be built in an upcoming step.</span>
-            </div>
+            <a href="#/settings" class="ds-btn ds-btn--secondary" style="margin-top:var(--space-2);">Configure
+                Preferences</a>
         </div>
     </template>
 
@@ -986,90 +1058,141 @@
             <header class="page-header">
                 <p class="page-header__eyebrow">Configuration</p>
                 <h1 class="page-header__heading">Settings</h1>
-                <p class="page-header__sub">Define what you are looking for. Your preferences shape every match, digest,
-                    and alert.</p>
+                <p class="page-header__sub">Define what you are looking for. Preferences are saved locally and power
+                    match scoring across the dashboard.</p>
             </header>
             <div class="settings-layout">
-                <div class="settings-form">
+                <form id="settings-form" class="settings-form" novalidate>
+
+                    <!-- Role Keywords -->
                     <div class="ds-card">
                         <div class="ds-card__header"><span class="ds-card__title">Role Keywords</span></div>
                         <div class="ds-card__body">
                             <div class="ds-field">
-                                <label class="ds-field__label">Job titles or keywords <span class="ds-field__required"
-                                        aria-hidden="true">*</span></label>
-                                <div class="ds-tag-group">
-                                    <span class="ds-tag">Product Manager <button class="ds-tag__remove"
-                                            aria-label="Remove">×</button></span>
-                                    <span class="ds-tag">Senior PM <button class="ds-tag__remove"
-                                            aria-label="Remove">×</button></span>
-                                    <span class="ds-tag-placeholder">Add a keyword…</span>
-                                </div>
-                                <span class="ds-field__hint">Examples: "SDE Intern", "Python Developer", "Data
-                                    Analyst".</span>
+                                <label class="ds-field__label" for="pref-keywords">Job titles or keywords</label>
+                                <input class="ds-input" type="text" id="pref-keywords" name="roleKeywords"
+                                    placeholder="e.g. SDE Intern, Python Developer, React" />
+                                <span class="ds-field__hint">Comma-separated. Matched against job titles (+25 pts) and
+                                    descriptions (+15 pts).</span>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Preferred Locations -->
                     <div class="ds-card">
                         <div class="ds-card__header"><span class="ds-card__title">Preferred Locations</span></div>
                         <div class="ds-card__body">
                             <div class="ds-field">
-                                <label class="ds-field__label">Cities or regions</label>
-                                <div class="ds-tag-group">
-                                    <span class="ds-tag">Bengaluru <button class="ds-tag__remove"
-                                            aria-label="Remove">×</button></span>
-                                    <span class="ds-tag">Remote <button class="ds-tag__remove"
-                                            aria-label="Remove">×</button></span>
-                                    <span class="ds-tag-placeholder">Add a location…</span>
-                                </div>
+                                <label class="ds-field__label" for="pref-locations">Cities</label>
+                                <select class="filter-input" id="pref-locations" name="preferredLocations" multiple
+                                    size="6" style="border-radius:var(--radius);padding:4px;">
+                                    <option value="Bengaluru">Bengaluru</option>
+                                    <option value="Mumbai">Mumbai</option>
+                                    <option value="Hyderabad">Hyderabad</option>
+                                    <option value="Pune">Pune</option>
+                                    <option value="Chennai">Chennai</option>
+                                    <option value="Delhi">Delhi</option>
+                                    <option value="Noida">Noida</option>
+                                    <option value="Gurugram">Gurugram</option>
+                                </select>
+                                <span class="ds-field__hint">Hold Ctrl / Cmd to select multiple. Location match = +15
+                                    pts.</span>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Work Mode -->
                     <div class="ds-card">
-                        <div class="ds-card__header"><span class="ds-card__title">Work Mode</span></div>
+                        <div class="ds-card__header"><span class="ds-card__title">Preferred Work Mode</span></div>
                         <div class="ds-card__body">
                             <div class="ds-field">
-                                <label class="ds-field__label" id="mode-lbl">Preferred arrangement</label>
-                                <div class="ds-mode-group" role="group" aria-labelledby="mode-lbl">
-                                    <button class="ds-mode-option is-selected" aria-pressed="true">Remote</button>
-                                    <button class="ds-mode-option" aria-pressed="false">Hybrid</button>
-                                    <button class="ds-mode-option" aria-pressed="false">Onsite</button>
+                                <label class="ds-field__label">Select all that apply</label>
+                                <div class="pref-checkbox-group">
+                                    <label class="pref-checkbox-item"><input type="checkbox" class="mode-cb"
+                                            value="Remote" /> Remote</label>
+                                    <label class="pref-checkbox-item"><input type="checkbox" class="mode-cb"
+                                            value="Hybrid" /> Hybrid</label>
+                                    <label class="pref-checkbox-item"><input type="checkbox" class="mode-cb"
+                                            value="Onsite" /> Onsite</label>
                                 </div>
+                                <span class="ds-field__hint">Mode match = +10 pts.</span>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Experience Level -->
                     <div class="ds-card">
                         <div class="ds-card__header"><span class="ds-card__title">Experience Level</span></div>
                         <div class="ds-card__body">
                             <div class="ds-field">
-                                <label class="ds-field__label" id="lvl-lbl">Your seniority</label>
-                                <div class="ds-level-group" role="group" aria-labelledby="lvl-lbl">
-                                    <button class="ds-level-option" aria-pressed="false">Fresher</button>
-                                    <button class="ds-level-option" aria-pressed="false">0–1 yr</button>
-                                    <button class="ds-level-option is-selected" aria-pressed="true">1–3 yrs</button>
-                                    <button class="ds-level-option" aria-pressed="false">3–5 yrs</button>
+                                <label class="ds-field__label" for="pref-exp">Your current level</label>
+                                <div class="filter-select-wrap" style="max-width:280px;">
+                                    <select class="filter-input" id="pref-exp" name="experienceLevel">
+                                        <option value="">Select level</option>
+                                        <option value="Fresher">Fresher</option>
+                                        <option value="0-1">0–1 year</option>
+                                        <option value="1-3">1–3 years</option>
+                                        <option value="3-5">3–5 years</option>
+                                    </select>
                                 </div>
+                                <span class="ds-field__hint">Exact match = +10 pts.</span>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Skills -->
+                    <div class="ds-card">
+                        <div class="ds-card__header"><span class="ds-card__title">Your Skills</span></div>
+                        <div class="ds-card__body">
+                            <div class="ds-field">
+                                <label class="ds-field__label" for="pref-skills">Technologies &amp; tools</label>
+                                <input class="ds-input" type="text" id="pref-skills" name="skills"
+                                    placeholder="e.g. React, Node.js, SQL, Python" />
+                                <span class="ds-field__hint">Comma-separated. Any overlap with job skills = +15
+                                    pts.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Min Match Score -->
+                    <div class="ds-card">
+                        <div class="ds-card__header"><span class="ds-card__title">Minimum Match Score</span></div>
+                        <div class="ds-card__body">
+                            <div class="ds-field">
+                                <label class="ds-field__label" for="pref-score">Threshold for "Show only matches" —
+                                    <span id="score-val">40%</span></label>
+                                <div class="pref-slider-wrap">
+                                    <input type="range" class="pref-slider" id="pref-score" name="minMatchScore" min="0"
+                                        max="100" value="40" />
+                                </div>
+                                <span class="ds-field__hint">Jobs scoring below this threshold are hidden when the
+                                    filter toggle is on.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
                     <div
                         style="display:flex;align-items:center;justify-content:space-between;padding-top:var(--space-1);">
-                        <span class="ds-body-sm">Preferences are stored locally in your browser.</span>
-                        <button class="ds-btn ds-btn--primary" disabled title="Logic wired in the next step">Save
-                            Preferences</button>
+                        <span id="save-msg" style="font-size:var(--text-sm);"></span>
+                        <button class="ds-btn ds-btn--primary" type="submit">Save Preferences</button>
                     </div>
-                </div>
+
+                </form>
+
                 <aside class="settings-aside">
                     <div class="ds-step-panel">
                         <p class="ds-step-panel__number">Step 1 of 4</p>
                         <p class="ds-step-panel__title">Configure your tracker</p>
-                        <p class="ds-step-panel__body">These preferences will filter and score job listings before they
-                            reach your dashboard or digest.</p>
+                        <p class="ds-step-panel__body">These preferences score every job on the dashboard. Saved to your
+                            browser — no account required.</p>
                     </div>
                     <div class="ds-alert ds-alert--info">
-                        <span class="ds-alert__icon" aria-hidden="true">i</span>
+                        <span class="ds-alert__icon">i</span>
                         <div class="ds-alert__content">
-                            <p class="ds-alert__title">UI skeleton only</p>
-                            <p class="ds-alert__message">Saving logic will be wired in the next build step.</p>
+                            <p class="ds-alert__title">Scoring summary</p>
+                            <p class="ds-alert__message">Title match +25 · Desc match +15 · Location +15 · Mode +10 ·
+                                Level +10 · Skills +15 · Fresh +5 · LinkedIn +5. Max 100.</p>
                         </div>
                     </div>
                 </aside>
@@ -1087,23 +1210,25 @@
             <div class="ds-card">
                 <div class="ds-card__body">
                     <div class="ds-checklist" style="flex-direction:column;align-items:flex-start;gap:var(--space-2);">
-                        <span class="ds-checklist__item ds-checklist__item--done"><span class="ds-checklist__box"
-                                aria-hidden="true"></span><span><strong>Design System</strong> — CSS tokens, typography,
-                                spacing, components</span></span>
-                        <span class="ds-checklist__item ds-checklist__item--done"><span class="ds-checklist__box"
-                                aria-hidden="true"></span><span><strong>Route Skeleton</strong> — Navigation shell, all
-                                routes, 404 page</span></span>
-                        <span class="ds-checklist__item ds-checklist__item--done"><span class="ds-checklist__box"
-                                aria-hidden="true"></span><span><strong>App Skeleton</strong> — Landing page, Settings
-                                UI, empty states</span></span>
-                        <span class="ds-checklist__item ds-checklist__item--done"><span class="ds-checklist__box"
-                                aria-hidden="true"></span><span><strong>Data Layer</strong> — 60 realistic Indian tech
-                                jobs rendered on Dashboard</span></span>
-                        <span class="ds-checklist__item"><span class="ds-checklist__box"
-                                aria-hidden="true"></span><span><strong>Digest Logic</strong> — Daily 9AM summary
-                                generation</span></span>
-                        <span class="ds-checklist__item"><span class="ds-checklist__box"
-                                aria-hidden="true"></span><span><strong>Deployed</strong> — Live on hosting
+                        <span class="ds-checklist__item ds-checklist__item--done"><span
+                                class="ds-checklist__box"></span><span><strong>Design System</strong> — CSS tokens,
+                                typography, spacing, components</span></span>
+                        <span class="ds-checklist__item ds-checklist__item--done"><span
+                                class="ds-checklist__box"></span><span><strong>Route Skeleton</strong> — Navigation
+                                shell, all routes, 404 page</span></span>
+                        <span class="ds-checklist__item ds-checklist__item--done"><span
+                                class="ds-checklist__box"></span><span><strong>App Skeleton</strong> — Landing page,
+                                Settings UI, empty states</span></span>
+                        <span class="ds-checklist__item ds-checklist__item--done"><span
+                                class="ds-checklist__box"></span><span><strong>Data Layer</strong> — 60 realistic Indian
+                                tech jobs, dashboard cards, filter bar, modal, saved page</span></span>
+                        <span class="ds-checklist__item ds-checklist__item--done"><span
+                                class="ds-checklist__box"></span><span><strong>Match Engine</strong> — Preferences form,
+                                8-rule scoring, badges, match toggle, salary/score sort</span></span>
+                        <span class="ds-checklist__item"><span class="ds-checklist__box"></span><span><strong>Digest
+                                    Logic</strong> — Daily 9AM summary generation</span></span>
+                        <span class="ds-checklist__item"><span
+                                class="ds-checklist__box"></span><span><strong>Deployed</strong> — Live on hosting
                                 platform</span></span>
                     </div>
                 </div>
@@ -1111,300 +1236,8 @@
         </div>
     </template>
 
-    <!-- SCRIPTS -->
     <script src="jobs.js"></script>
-    <script>
-        'use strict';
-
-        /* ── SAVED JOBS (localStorage) ── */
-        const SAVED_KEY = 'jnt_saved_v1';
-        function getSaved() { try { return new Set(JSON.parse(localStorage.getItem(SAVED_KEY) || '[]')); } catch (_) { return new Set(); } }
-        function setSaved(s) { localStorage.setItem(SAVED_KEY, JSON.stringify([...s])); }
-        function toggleSave(id) { const s = getSaved(); s.has(id) ? s.delete(id) : s.add(id); setSaved(s); return s.has(id); }
-        function isSaved(id) { return getSaved().has(id); }
-
-        /* ── FILTER STATE ── */
-        const F = { keyword: '', location: '', mode: '', experience: '', source: '', sort: 'latest' };
-
-        /* ── HELPERS ── */
-        const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        function postedLabel(d) { if (d === 0) return 'Today'; if (d === 1) return '1 day ago'; return `${d} days ago`; }
-
-        /* ── JOB CARD HTML ── */
-        function jobCardHTML(j) {
-            const saved = isSaved(j.id);
-            return `
-  <article class="job-card" data-id="${j.id}">
-    <div class="job-card__top">
-      <div>
-        <h3 class="job-card__title">${esc(j.title)}</h3>
-        <p class="job-card__company">${esc(j.company)}</p>
-      </div>
-      <span class="source-badge source-badge--${esc(j.source)}">${esc(j.source)}</span>
-    </div>
-    <p class="job-card__meta">${esc(j.location)} · ${esc(j.mode)} · ${esc(j.experience)}</p>
-    <p class="job-card__salary">${esc(j.salaryRange)}</p>
-    <div class="job-card__tags">${j.skills.slice(0, 3).map(sk => `<span class="job-card__tag">${esc(sk)}</span>`).join('')}</div>
-    <div class="job-card__footer">
-      <span class="job-card__posted">${postedLabel(j.postedDaysAgo)}</span>
-      <div class="job-card__actions">
-        <button class="ds-btn ds-btn--ghost ds-btn--sm" onclick="openModal(${j.id})">View</button>
-        <button class="ds-btn ds-btn--secondary ds-btn--sm save-btn" data-id="${j.id}" onclick="handleSave(${j.id},this)">${saved ? 'Saved ✓' : 'Save'}</button>
-        <a class="ds-btn ds-btn--primary ds-btn--sm" href="${esc(j.applyUrl)}" target="_blank" rel="noopener">Apply</a>
-      </div>
-    </div>
-  </article>`;
-        }
-
-        /* ── FILTER JOBS ── */
-        function filterJobs(jobs) {
-            let result = [...jobs];
-            const kw = F.keyword.toLowerCase().trim();
-            if (kw) result = result.filter(j => j.title.toLowerCase().includes(kw) || j.company.toLowerCase().includes(kw) || j.skills.some(s => s.toLowerCase().includes(kw)));
-            if (F.location) result = result.filter(j => j.location === F.location || (F.location === 'Remote' && j.mode === 'Remote'));
-            if (F.mode) result = result.filter(j => j.mode === F.mode);
-            if (F.experience) result = result.filter(j => j.experience === F.experience);
-            if (F.source) result = result.filter(j => j.source === F.source);
-            if (F.sort === 'latest') result.sort((a, b) => a.postedDaysAgo - b.postedDaysAgo);
-            else if (F.sort === 'oldest') result.sort((a, b) => b.postedDaysAgo - a.postedDaysAgo);
-            return result;
-        }
-
-        /* ── RENDER DASHBOARD ── */
-        function renderDashboard() {
-            const jobs = window.JOBS || [];
-            const locs = [...new Set(jobs.map(j => j.location))].sort();
-            const outlet = document.getElementById('app-outlet');
-            outlet.innerHTML = `
-  <div class="page-wrap">
-    <header class="page-header">
-      <p class="page-header__eyebrow">Live Listings</p>
-      <h1 class="page-header__heading">Dashboard</h1>
-      <p class="page-header__sub">Browse ${jobs.length} matched roles curated for Indian tech professionals.</p>
-    </header>
-    <div class="filter-bar">
-      <div class="filter-group filter-group--wide">
-        <label class="filter-label" for="f-keyword">Search</label>
-        <input class="filter-input" id="f-keyword" type="search" placeholder="Title, company or skill…" value="${esc(F.keyword)}" />
-      </div>
-      <div class="filter-group">
-        <label class="filter-label" for="f-location">Location</label>
-        <div class="filter-select-wrap">
-          <select class="filter-input" id="f-location">
-            <option value="">All locations</option>
-            ${locs.map(l => `<option value="${esc(l)}"${F.location === l ? ' selected' : ''}>${esc(l)}</option>`).join('')}
-          </select>
-        </div>
-      </div>
-      <div class="filter-group">
-        <label class="filter-label" for="f-mode">Mode</label>
-        <div class="filter-select-wrap">
-          <select class="filter-input" id="f-mode">
-            <option value="">All modes</option>
-            ${['Remote', 'Hybrid', 'Onsite'].map(m => `<option value="${m}"${F.mode === m ? ' selected' : ''}>${m}</option>`).join('')}
-          </select>
-        </div>
-      </div>
-      <div class="filter-group">
-        <label class="filter-label" for="f-exp">Experience</label>
-        <div class="filter-select-wrap">
-          <select class="filter-input" id="f-exp">
-            <option value="">All levels</option>
-            ${['Fresher', '0-1', '1-3', '3-5'].map(e => `<option value="${e}"${F.experience === e ? ' selected' : ''}>${e === 'Fresher' ? 'Fresher' : e + ' yrs'}</option>`).join('')}
-          </select>
-        </div>
-      </div>
-      <div class="filter-group">
-        <label class="filter-label" for="f-source">Source</label>
-        <div class="filter-select-wrap">
-          <select class="filter-input" id="f-source">
-            <option value="">All sources</option>
-            ${['LinkedIn', 'Naukri', 'Indeed'].map(s => `<option value="${s}"${F.source === s ? ' selected' : ''}>${s}</option>`).join('')}
-          </select>
-        </div>
-      </div>
-      <div class="filter-group">
-        <label class="filter-label" for="f-sort">Sort</label>
-        <div class="filter-select-wrap">
-          <select class="filter-input" id="f-sort">
-            <option value="latest"${F.sort === 'latest' ? ' selected' : ''}>Latest first</option>
-            <option value="oldest"${F.sort === 'oldest' ? ' selected' : ''}>Oldest first</option>
-          </select>
-        </div>
-      </div>
-    </div>
-    <div id="job-results"></div>
-  </div>`;
-            bindFilters();
-            renderJobResults();
-        }
-
-        function renderJobResults() {
-            const filtered = filterJobs(window.JOBS || []);
-            const container = document.getElementById('job-results');
-            if (!container) return;
-            if (!filtered.length) {
-                container.innerHTML = `<div class="empty-state"><div class="empty-state__ring" aria-hidden="true"><div class="empty-state__ring-inner"></div></div><h2 class="empty-state__heading">No jobs match your search.</h2><p class="empty-state__sub">Try adjusting your filters or clearing the keyword search.</p><button class="ds-btn ds-btn--secondary" style="margin-top:var(--space-2);" onclick="clearFilters()">Clear Filters</button></div>`;
-                return;
-            }
-            container.innerHTML = `<p class="job-count">${filtered.length} role${filtered.length !== 1 ? 's' : ''} found</p><div class="job-grid">${filtered.map(jobCardHTML).join('')}</div>`;
-        }
-
-        function bindFilters() {
-            const bind = (id, key) => {
-                const el = document.getElementById(id);
-                if (!el) return;
-                el.addEventListener('input', () => { F[key] = el.value; renderJobResults(); });
-            };
-            bind('f-keyword', 'keyword'); bind('f-location', 'location');
-            bind('f-mode', 'mode'); bind('f-exp', 'experience');
-            bind('f-source', 'source'); bind('f-sort', 'sort');
-        }
-
-        function clearFilters() {
-            Object.keys(F).forEach(k => F[k] = k === 'sort' ? 'latest' : '');
-            renderDashboard();
-        }
-
-        /* ── RENDER SAVED ── */
-        function renderSaved() {
-            const saved = getSaved();
-            const jobs = (window.JOBS || []).filter(j => saved.has(j.id));
-            const outlet = document.getElementById('app-outlet');
-            let body;
-            if (!jobs.length) {
-                body = `<div class="empty-state">
-      <div class="empty-state__ring" aria-hidden="true"><div class="empty-state__ring-inner"></div></div>
-      <p class="ds-eyebrow">Saved Roles</p>
-      <h1 class="empty-state__heading">Your shortlist lives here.</h1>
-      <p class="empty-state__sub">Roles you bookmark from the dashboard will appear here for easy review and comparison.</p>
-      <a href="#/dashboard" class="ds-btn ds-btn--secondary" style="margin-top:var(--space-2);">Go to Dashboard</a>
-    </div>`;
-            } else {
-                body = `<div class="page-wrap">
-      <header class="page-header">
-        <p class="page-header__eyebrow">Saved Roles</p>
-        <h1 class="page-header__heading">Your Shortlist</h1>
-        <p class="page-header__sub">${jobs.length} role${jobs.length !== 1 ? 's' : ''} saved.</p>
-      </header>
-      <div class="job-grid">${jobs.map(jobCardHTML).join('')}</div>
-    </div>`;
-            }
-            outlet.innerHTML = body;
-        }
-
-        /* ── MODAL ── */
-        function openModal(id) {
-            const j = (window.JOBS || []).find(x => x.id === id); if (!j) return;
-            document.getElementById('modal-title').textContent = j.title;
-            document.getElementById('modal-company').textContent = j.company;
-            document.getElementById('modal-meta').innerHTML = [
-                `<span class="modal__meta-item"><strong>${j.location}</strong></span>`,
-                `<span class="modal__meta-item">· ${j.mode}</span>`,
-                `<span class="modal__meta-item">· ${j.experience === 'Fresher' ? 'Fresher' : j.experience + ' yrs'}</span>`,
-                `<span class="modal__meta-item">· <strong>${j.salaryRange}</strong></span>`,
-                `<span class="modal__meta-item">· ${postedLabel(j.postedDaysAgo)}</span>`,
-                `<span class="modal__meta-item" style="margin-left:auto;"><span class="source-badge source-badge--${esc(j.source)}">${esc(j.source)}</span></span>`
-            ].join('');
-            document.getElementById('modal-desc').textContent = j.description;
-            document.getElementById('modal-skills').innerHTML = j.skills.map(s => `<span class="job-card__tag">${esc(s)}</span>`).join('');
-            const applyBtn = document.getElementById('modal-apply-btn');
-            applyBtn.href = j.applyUrl;
-            const saveBtn = document.getElementById('modal-save-btn');
-            saveBtn.textContent = isSaved(id) ? 'Saved ✓' : 'Save Role';
-            saveBtn.onclick = () => { toggleSave(id); saveBtn.textContent = isSaved(id) ? 'Saved ✓' : 'Save Role'; syncSaveBtns(id); };
-            document.getElementById('job-modal').classList.add('is-open');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal() {
-            document.getElementById('job-modal').classList.remove('is-open');
-            document.body.style.overflow = '';
-        }
-
-        function handleSave(id, btn) {
-            toggleSave(id);
-            btn.textContent = isSaved(id) ? 'Saved ✓' : 'Save';
-            syncSaveBtns(id);
-        }
-
-        function syncSaveBtns(id) {
-            document.querySelectorAll(`.save-btn[data-id="${id}"]`).forEach(b => {
-                b.textContent = isSaved(id) ? 'Saved ✓' : 'Save';
-            });
-        }
-
-        document.getElementById('modal-close').addEventListener('click', closeModal);
-        document.getElementById('job-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-        /* ── ROUTER ── */
-        const ROUTES = {
-            '': { tpl: 'tpl-home', title: 'Home' },
-            'digest': { tpl: 'tpl-digest', title: 'Digest' },
-            'settings': { tpl: 'tpl-settings', title: 'Settings' },
-            'proof': { tpl: 'tpl-proof', title: 'Proof' },
-        };
-
-        function getSegment() { return (window.location.hash || '').replace(/^#\/?/, '').split('/')[0].toLowerCase().trim(); }
-
-        function navigate() {
-            const seg = getSegment();
-            const outlet = document.getElementById('app-outlet');
-            if (seg === 'dashboard') { renderDashboard(); }
-            else if (seg === 'saved') { renderSaved(); }
-            else {
-                const route = ROUTES[seg];
-                if (route) {
-                    const tpl = document.getElementById(route.tpl);
-                    outlet.innerHTML = ''; if (tpl) outlet.appendChild(tpl.content.cloneNode(true));
-                    document.title = `${route.title} — Job Notification Tracker`;
-                    bindSettingsUI();
-                } else {
-                    outlet.innerHTML = `<div class="notfound"><p class="notfound__code" aria-hidden="true">404</p><h1 class="notfound__heading">Page Not Found</h1><p class="notfound__sub">The page you are looking for does not exist.</p><a href="#/" class="ds-btn ds-btn--primary">Go to Home</a></div>`;
-                    document.title = 'Not Found — Job Notification Tracker';
-                }
-            }
-            syncNav(seg);
-            closeMobileDrawer();
-            window.scrollTo({ top: 0, behavior: 'instant' });
-        }
-
-        function syncNav(seg) {
-            document.querySelectorAll('[data-route]').forEach(l => {
-                const match = l.dataset.route === seg;
-                l.classList.toggle('is-active', match);
-                l.setAttribute('aria-current', match ? 'page' : 'false');
-            });
-        }
-
-        function bindSettingsUI() {
-            document.querySelectorAll('.ds-mode-group .ds-mode-option').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    btn.parentElement.querySelectorAll('.ds-mode-option').forEach(b => { b.classList.remove('is-selected'); b.setAttribute('aria-pressed', 'false'); });
-                    btn.classList.add('is-selected'); btn.setAttribute('aria-pressed', 'true');
-                });
-            });
-            document.querySelectorAll('.ds-level-group .ds-level-option').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    btn.parentElement.querySelectorAll('.ds-level-option').forEach(b => { b.classList.remove('is-selected'); b.setAttribute('aria-pressed', 'false'); });
-                    btn.classList.add('is-selected'); btn.setAttribute('aria-pressed', 'true');
-                });
-            });
-        }
-
-        /* ── HAMBURGER ── */
-        const hamburger = document.getElementById('hamburger-btn');
-        const drawer = document.getElementById('mobile-drawer');
-        function closeMobileDrawer() { drawer.classList.remove('is-open'); hamburger.setAttribute('aria-expanded', 'false'); }
-        hamburger.addEventListener('click', () => { const open = drawer.classList.contains('is-open'); open ? closeMobileDrawer() : (drawer.classList.add('is-open'), hamburger.setAttribute('aria-expanded', 'true')); });
-        document.addEventListener('click', e => { if (!e.target.closest('.app-nav')) closeMobileDrawer(); });
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMobileDrawer(); });
-
-        /* ── BOOT ── */
-        window.addEventListener('hashchange', navigate);
-        if (!window.location.hash || window.location.hash === '#') { window.location.replace('#/'); } else { navigate(); }
-    </script>
+    <script src="app.js"></script>
 </body>
 
 </html>
