@@ -4,17 +4,16 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Job Notification App</title>
-    <meta name="description" content="Track the roles you care about. Get notified when they appear." />
+    <title>Job Notification Tracker</title>
+    <meta name="description" content="Precision-matched job discovery delivered daily at 9AM." />
     <link rel="stylesheet" href="design-system.css" />
 
     <style>
         /* ─────────────────────────────────────────
-       APP SHELL — Navigation + Router styles
-       Not part of the design system; app-specific
+       APP SHELL
     ───────────────────────────────────────── */
 
-        /* ── NAV BAR ── */
+        /* ── NAV ── */
         .app-nav {
             position: sticky;
             top: 0;
@@ -33,7 +32,6 @@
             padding: 0 var(--space-4);
         }
 
-        /* Brand */
         .app-nav__brand {
             font-family: var(--font-serif);
             font-size: var(--text-md);
@@ -48,11 +46,9 @@
             color: var(--color-text-primary);
         }
 
-        /* Nav links (desktop) */
         .app-nav__links {
             display: flex;
             align-items: center;
-            gap: 0;
             list-style: none;
         }
 
@@ -79,7 +75,7 @@
             border-bottom-color: var(--color-accent);
         }
 
-        /* ── HAMBURGER (mobile only) ── */
+        /* ── HAMBURGER ── */
         .app-nav__hamburger {
             display: none;
             flex-direction: column;
@@ -108,7 +104,6 @@
             transition: transform var(--transition-slow), opacity var(--transition);
         }
 
-        /* Hamburger open state */
         .app-nav__hamburger[aria-expanded="true"] .app-nav__hamburger-bar:nth-child(1) {
             transform: translateY(6.5px) rotate(45deg);
         }
@@ -124,7 +119,6 @@
         /* ── MOBILE DRAWER ── */
         .app-nav__drawer {
             display: none;
-            /* shown via JS class */
             flex-direction: column;
             background-color: var(--color-surface);
             border-bottom: var(--border);
@@ -158,52 +152,387 @@
             border-left-color: var(--color-accent);
         }
 
-        /* ── PAGE OUTLET ── */
+        /* ── OUTLET ── */
         #app-outlet {
             flex: 1;
         }
 
-        /* ── PLACEHOLDER PAGE ── */
-        .placeholder-page {
-            min-height: calc(100vh - var(--topbar-height) - 57px);
-            /* minus nav + footer */
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: center;
-            max-width: var(--max-layout-width);
-            margin: 0 auto;
-            padding: var(--space-5) var(--space-4);
+        /* ── PROOF FOOTER ── */
+        .app-footer {
+            border-top: var(--border);
+            background-color: var(--color-surface);
+            padding: var(--space-2) var(--space-4);
         }
 
-        .placeholder-page__eyebrow {
+        .app-footer__inner {
+            max-width: var(--max-layout-width);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            flex-wrap: wrap;
+        }
+
+        .app-footer__label {
             font-size: var(--text-xs);
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: var(--tracking-wide);
             color: var(--color-text-secondary);
-            margin-bottom: var(--space-2);
         }
 
-        .placeholder-page__heading {
-            font-family: var(--font-serif);
-            font-size: var(--text-3xl);
+        /* ══════════════════════════════════════
+       PAGE LAYOUTS
+    ══════════════════════════════════════ */
+
+        .page-container {
+            max-width: var(--max-layout-width);
+            margin: 0 auto;
+            padding: var(--space-5) var(--space-4);
+            min-height: calc(100vh - var(--topbar-height) - 57px);
+        }
+
+        /* ── LANDING PAGE ── */
+        .landing {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            min-height: calc(100vh - var(--topbar-height) - 57px);
+            padding: var(--space-5) var(--space-4);
+            max-width: var(--max-layout-width);
+            margin: 0 auto;
+        }
+
+        .landing__eyebrow {
+            font-size: var(--text-xs);
             font-weight: 600;
-            line-height: var(--leading-tight);
-            letter-spacing: var(--tracking-tight);
-            color: var(--color-text-primary);
+            text-transform: uppercase;
+            letter-spacing: var(--tracking-wide);
+            color: var(--color-accent);
             margin-bottom: var(--space-2);
-            max-width: var(--max-text-width);
         }
 
-        .placeholder-page__sub {
+        .landing__headline {
+            font-family: var(--font-serif);
+            font-size: clamp(40px, 6vw, 64px);
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            color: var(--color-text-primary);
+            max-width: 640px;
+            margin-bottom: var(--space-2);
+        }
+
+        .landing__subtext {
             font-size: var(--text-md);
             color: var(--color-text-secondary);
             line-height: var(--leading-relaxed);
             max-width: 480px;
+            margin-bottom: var(--space-4);
         }
 
-        /* ── 404 PAGE ── */
+        .landing__cta-row {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            flex-wrap: wrap;
+        }
+
+        .landing__meta {
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+        }
+
+        .landing__divider {
+            width: 48px;
+            height: 2px;
+            background-color: var(--color-accent);
+            margin: var(--space-4) 0;
+            border: none;
+        }
+
+        .landing__value-props {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-3);
+            max-width: 720px;
+            margin-top: var(--space-4);
+        }
+
+        .landing__prop {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-1);
+        }
+
+        .landing__prop-label {
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .landing__prop-sub {
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+            line-height: var(--leading-relaxed);
+        }
+
+        /* ── SETTINGS PAGE ── */
+        .settings-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--space-4);
+            align-items: start;
+        }
+
+        .settings-form {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+        }
+
+        .settings-section {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+
+        .settings-section__title {
+            font-family: var(--font-serif);
+            font-size: var(--text-lg);
+            font-weight: 500;
+            color: var(--color-text-primary);
+            padding-bottom: var(--space-1);
+            border-bottom: var(--border);
+            margin-bottom: var(--space-1);
+        }
+
+        /* Tag-style chip input preview */
+        .ds-tag-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-1);
+            padding: var(--space-1);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            background: var(--color-surface);
+            min-height: 44px;
+            align-items: center;
+            cursor: text;
+        }
+
+        .ds-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 10px;
+            background-color: var(--color-bg);
+            border: var(--border);
+            border-radius: var(--radius-full);
+            font-size: var(--text-sm);
+            color: var(--color-text-primary);
+            font-weight: 500;
+        }
+
+        .ds-tag__remove {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .ds-tag-placeholder {
+            font-size: var(--text-sm);
+            color: var(--color-text-placeholder);
+        }
+
+        /* Mode button group */
+        .ds-mode-group {
+            display: flex;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .ds-mode-option {
+            flex: 1;
+            padding: 10px var(--space-2);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            text-align: center;
+            cursor: pointer;
+            background: var(--color-surface);
+            color: var(--color-text-secondary);
+            border: none;
+            border-right: var(--border);
+            transition: background-color var(--transition), color var(--transition);
+        }
+
+        .ds-mode-option:last-child {
+            border-right: none;
+        }
+
+        .ds-mode-option:hover {
+            background-color: var(--color-bg);
+            color: var(--color-text-primary);
+        }
+
+        .ds-mode-option.is-selected {
+            background-color: var(--color-accent-subtle);
+            color: var(--color-accent);
+            font-weight: 600;
+        }
+
+        /* Experience level slider track preview */
+        .ds-level-group {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-1);
+        }
+
+        .ds-level-option {
+            padding: var(--space-1) var(--space-1);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            text-align: center;
+            cursor: pointer;
+            background: var(--color-surface);
+            color: var(--color-text-secondary);
+            border: var(--border);
+            border-radius: var(--radius);
+            transition: background-color var(--transition), color var(--transition), border-color var(--transition);
+        }
+
+        .ds-level-option:hover {
+            border-color: var(--color-text-secondary);
+            color: var(--color-text-primary);
+        }
+
+        .ds-level-option.is-selected {
+            background-color: var(--color-accent-subtle);
+            color: var(--color-accent);
+            border-color: var(--color-accent);
+        }
+
+        /* Settings sidebar info card */
+        .settings-info {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+            position: sticky;
+            top: calc(var(--topbar-height) + var(--space-3));
+        }
+
+        /* ── SHARED EMPTY STATE ── */
+        .empty-page {
+            min-height: calc(100vh - var(--topbar-height) - 57px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: var(--space-5) var(--space-4);
+        }
+
+        .empty-page__ornament {
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: var(--border);
+            border-radius: 50%;
+            margin-bottom: var(--space-3);
+        }
+
+        .empty-page__ornament-inner {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 1.5px solid var(--color-border);
+        }
+
+        .empty-page__eyebrow {
+            font-size: var(--text-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: var(--tracking-wide);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-1);
+        }
+
+        .empty-page__heading {
+            font-family: var(--font-serif);
+            font-size: var(--text-xl);
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-1);
+            max-width: 440px;
+        }
+
+        .empty-page__sub {
+            font-size: var(--text-base);
+            color: var(--color-text-secondary);
+            line-height: var(--leading-relaxed);
+            max-width: 400px;
+        }
+
+        .empty-page__action {
+            margin-top: var(--space-3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-1);
+        }
+
+        /* ── PROOF PAGE ── */
+        .proof-page {
+            padding: var(--space-5) var(--space-4);
+            max-width: var(--max-layout-width);
+            margin: 0 auto;
+        }
+
+        .proof-page__header {
+            margin-bottom: var(--space-4);
+            padding-bottom: var(--space-3);
+            border-bottom: var(--border);
+        }
+
+        /* ── PAGE HEADER (reused on settings, proof) ── */
+        .page-header {
+            margin-bottom: var(--space-4);
+        }
+
+        .page-header__eyebrow {
+            font-size: var(--text-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: var(--tracking-wide);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-1);
+        }
+
+        .page-header__heading {
+            font-family: var(--font-serif);
+            font-size: var(--text-2xl);
+            font-weight: 600;
+            letter-spacing: var(--tracking-tight);
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-1);
+        }
+
+        .page-header__sub {
+            font-size: var(--text-base);
+            color: var(--color-text-secondary);
+            line-height: var(--leading-relaxed);
+            max-width: var(--max-text-width);
+        }
+
+        /* ── 404 ── */
         .not-found-page {
             min-height: calc(100vh - var(--topbar-height) - 57px);
             display: flex;
@@ -237,35 +566,25 @@
             font-size: var(--text-base);
             color: var(--color-text-secondary);
             line-height: var(--leading-relaxed);
-            max-width: 400px;
+            max-width: 360px;
             margin-bottom: var(--space-3);
         }
 
-        /* ── PROOF FOOTER ── */
-        .app-footer {
-            border-top: var(--border);
-            background-color: var(--color-surface);
-            padding: var(--space-2) var(--space-4);
-        }
-
-        .app-footer__inner {
-            max-width: var(--max-layout-width);
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-            flex-wrap: wrap;
-        }
-
-        .app-footer__label {
-            font-size: var(--text-xs);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: var(--tracking-wide);
-            color: var(--color-text-secondary);
-        }
-
         /* ── RESPONSIVE ── */
+        @media (max-width: 768px) {
+            .settings-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .settings-info {
+                position: static;
+            }
+
+            .landing__value-props {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
         @media (max-width: 640px) {
             .app-nav__links {
                 display: none;
@@ -279,18 +598,28 @@
                 padding: 0 var(--space-3);
             }
 
-            .placeholder-page__heading {
+            .landing__headline {
                 font-size: var(--text-2xl);
             }
 
-            .not-found-page__code {
-                font-size: 64px;
+            .landing {
+                padding: var(--space-4) var(--space-3);
             }
 
-            .placeholder-page {
+            .landing__value-props {
+                grid-template-columns: 1fr;
+            }
+
+            .ds-level-group {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .page-container {
                 padding: var(--space-4) var(--space-3);
-                justify-content: flex-start;
-                padding-top: var(--space-5);
+            }
+
+            .proof-page {
+                padding: var(--space-4) var(--space-3);
             }
         }
     </style>
@@ -299,16 +628,14 @@
 <body>
 
     <!-- ══════════════════════════════════════════
-     TOP NAVIGATION
+     NAVIGATION
 ══════════════════════════════════════════ -->
     <nav class="app-nav" role="navigation" aria-label="Main navigation">
         <div class="app-nav__inner">
-            <!-- Brand -->
-            <a href="#/" class="app-nav__brand" aria-label="Job Notification App home">
-                Job Notification App
+            <a href="#/" class="app-nav__brand" aria-label="Job Notification Tracker — home">
+                Job Notification Tracker
             </a>
 
-            <!-- Desktop links -->
             <ul class="app-nav__links" role="list">
                 <li><a href="#/dashboard" class="app-nav__link" data-route="dashboard">Dashboard</a></li>
                 <li><a href="#/saved" class="app-nav__link" data-route="saved">Saved</a></li>
@@ -317,7 +644,6 @@
                 <li><a href="#/proof" class="app-nav__link" data-route="proof">Proof</a></li>
             </ul>
 
-            <!-- Mobile hamburger -->
             <button class="app-nav__hamburger" id="hamburger-btn" aria-expanded="false" aria-controls="mobile-drawer"
                 aria-label="Open navigation menu">
                 <span class="app-nav__hamburger-bar"></span>
@@ -326,7 +652,6 @@
             </button>
         </div>
 
-        <!-- Mobile drawer -->
         <div class="app-nav__drawer" id="mobile-drawer" role="list" aria-label="Mobile navigation">
             <a href="#/dashboard" class="app-nav__drawer-link" data-route="dashboard" role="listitem">Dashboard</a>
             <a href="#/saved" class="app-nav__drawer-link" data-route="saved" role="listitem">Saved</a>
@@ -337,7 +662,7 @@
     </nav>
 
     <!-- ══════════════════════════════════════════
-     PAGE OUTLET (router renders here)
+     PAGE OUTLET
 ══════════════════════════════════════════ -->
     <main id="app-outlet" role="main" aria-live="polite" aria-atomic="true"></main>
 
@@ -369,105 +694,366 @@
     </footer>
 
     <!-- ══════════════════════════════════════════
-     ROUTER & NAV LOGIC
+     PAGE TEMPLATES (HTML strings)
+══════════════════════════════════════════ -->
+    <template id="tpl-home">
+        <section class="landing" aria-labelledby="landing-heading">
+            <p class="landing__eyebrow">Job Notification Tracker</p>
+            <h1 class="landing__headline" id="landing-heading">Stop Missing The Right Jobs.</h1>
+            <p class="landing__subtext">Precision-matched job discovery delivered daily at 9AM.</p>
+            <div class="landing__cta-row">
+                <a href="#/settings" class="ds-btn ds-btn--primary ds-btn--lg">Start Tracking</a>
+                <span class="landing__meta">No account needed to explore.</span>
+            </div>
+            <hr class="landing__divider" aria-hidden="true" />
+            <div class="landing__value-props" aria-label="Key features">
+                <div class="landing__prop">
+                    <span class="landing__prop-label">Daily at 9AM</span>
+                    <span class="landing__prop-sub">One focused digest. No intraday noise.</span>
+                </div>
+                <div class="landing__prop">
+                    <span class="landing__prop-label">Precision Filters</span>
+                    <span class="landing__prop-sub">Role, location, mode, level — all configurable.</span>
+                </div>
+                <div class="landing__prop">
+                    <span class="landing__prop-label">Save &amp; Track</span>
+                    <span class="landing__prop-sub">Bookmark roles and follow their status over time.</span>
+                </div>
+            </div>
+        </section>
+    </template>
+
+    <template id="tpl-dashboard">
+        <div class="empty-page" aria-labelledby="dashboard-heading">
+            <div class="empty-page__ornament" aria-hidden="true">
+                <div class="empty-page__ornament-inner"></div>
+            </div>
+            <p class="empty-page__eyebrow">Dashboard</p>
+            <h1 class="empty-page__heading" id="dashboard-heading">No jobs yet.</h1>
+            <p class="empty-page__sub">
+                In the next step, you will load a realistic dataset of matched roles tailored to your preferences.
+            </p>
+            <div class="empty-page__action">
+                <a href="#/settings" class="ds-btn ds-btn--primary">Configure Preferences</a>
+                <span class="ds-body-sm">Set your filters first, then return here.</span>
+            </div>
+        </div>
+    </template>
+
+    <template id="tpl-settings">
+        <div class="page-container">
+            <header class="page-header">
+                <p class="page-header__eyebrow">Configuration</p>
+                <h1 class="page-header__heading">Settings</h1>
+                <p class="page-header__sub">
+                    Define what you are looking for. Your preferences shape every match, digest, and alert.
+                </p>
+            </header>
+
+            <div class="settings-layout">
+                <!-- Form -->
+                <div class="settings-form" aria-label="Preference form">
+
+                    <!-- Role keywords -->
+                    <div class="ds-card">
+                        <div class="ds-card__header">
+                            <span class="ds-card__title">Role Keywords</span>
+                        </div>
+                        <div class="ds-card__body">
+                            <div class="ds-field">
+                                <label class="ds-field__label" for="role-keywords">
+                                    Job titles or keywords <span class="ds-field__required" aria-hidden="true">*</span>
+                                </label>
+                                <div class="ds-tag-group" aria-label="Selected keywords" role="group">
+                                    <span class="ds-tag">Product Manager <button class="ds-tag__remove"
+                                            aria-label="Remove Product Manager">×</button></span>
+                                    <span class="ds-tag">Senior PM <button class="ds-tag__remove"
+                                            aria-label="Remove Senior PM">×</button></span>
+                                    <span class="ds-tag-placeholder">Add a keyword…</span>
+                                </div>
+                                <span class="ds-field__hint">Add roles you want to track. Examples: "Product Manager",
+                                    "Growth PM", "Head of Product".</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Preferred locations -->
+                    <div class="ds-card">
+                        <div class="ds-card__header">
+                            <span class="ds-card__title">Preferred Locations</span>
+                        </div>
+                        <div class="ds-card__body">
+                            <div class="ds-field">
+                                <label class="ds-field__label" for="locations">Cities or regions</label>
+                                <div class="ds-tag-group" aria-label="Selected locations" role="group">
+                                    <span class="ds-tag">Bengaluru <button class="ds-tag__remove"
+                                            aria-label="Remove Bengaluru">×</button></span>
+                                    <span class="ds-tag">Remote <button class="ds-tag__remove"
+                                            aria-label="Remove Remote">×</button></span>
+                                    <span class="ds-tag-placeholder">Add a location…</span>
+                                </div>
+                                <span class="ds-field__hint">Leave empty to include all locations.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Work mode -->
+                    <div class="ds-card">
+                        <div class="ds-card__header">
+                            <span class="ds-card__title">Work Mode</span>
+                        </div>
+                        <div class="ds-card__body">
+                            <div class="ds-field">
+                                <label class="ds-field__label" id="mode-label">Preferred arrangement</label>
+                                <div class="ds-mode-group" role="group" aria-labelledby="mode-label">
+                                    <button class="ds-mode-option is-selected" aria-pressed="true">Remote</button>
+                                    <button class="ds-mode-option" aria-pressed="false">Hybrid</button>
+                                    <button class="ds-mode-option" aria-pressed="false">Onsite</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Experience level -->
+                    <div class="ds-card">
+                        <div class="ds-card__header">
+                            <span class="ds-card__title">Experience Level</span>
+                        </div>
+                        <div class="ds-card__body">
+                            <div class="ds-field">
+                                <label class="ds-field__label" id="level-label">Your seniority</label>
+                                <div class="ds-level-group" role="group" aria-labelledby="level-label">
+                                    <button class="ds-level-option" aria-pressed="false">Internship</button>
+                                    <button class="ds-level-option" aria-pressed="false">Entry</button>
+                                    <button class="ds-level-option is-selected" aria-pressed="true">Mid-Senior</button>
+                                    <button class="ds-level-option" aria-pressed="false">Director+</button>
+                                </div>
+                                <span class="ds-field__hint">We use this to filter out irrelevant matches.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Save row (UI only) -->
+                    <div class="ds-flex ds-items-center ds-justify-between" style="padding-top: var(--space-1);">
+                        <span class="ds-body-sm">Preferences are stored locally in your browser.</span>
+                        <button class="ds-btn ds-btn--primary" disabled title="Logic will be added in the next step">
+                            Save Preferences
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sidebar info -->
+                <aside class="settings-info" aria-label="Settings guidance">
+                    <div class="ds-step-panel">
+                        <p class="ds-step-panel__number">Step 1 of 4</p>
+                        <p class="ds-step-panel__title">Configure your tracker</p>
+                        <p class="ds-step-panel__body">
+                            These preferences are used to filter and score job listings before they reach your dashboard
+                            or digest.
+                        </p>
+                    </div>
+
+                    <div class="ds-alert ds-alert--info">
+                        <span class="ds-alert__icon" aria-hidden="true">i</span>
+                        <div class="ds-alert__content">
+                            <p class="ds-alert__title">Preferences not saved yet</p>
+                            <p class="ds-alert__message">Saving logic will be wired in the next build step. This is a UI
+                                skeleton.</p>
+                        </div>
+                    </div>
+
+                    <div class="ds-card ds-card--sm">
+                        <div class="ds-card__body">
+                            <p class="ds-eyebrow ds-mb-1">What happens next</p>
+                            <p class="ds-body-sm">Your preferences will shape daily digests, dashboard rankings, and
+                                saved job alerts.</p>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </template>
+
+    <template id="tpl-saved">
+        <div class="empty-page" aria-labelledby="saved-heading">
+            <div class="empty-page__ornament" aria-hidden="true">
+                <div class="empty-page__ornament-inner"></div>
+            </div>
+            <p class="empty-page__eyebrow">Saved Roles</p>
+            <h1 class="empty-page__heading" id="saved-heading">Your shortlist lives here.</h1>
+            <p class="empty-page__sub">
+                Roles you bookmark from your dashboard or digest will appear here for easy review and comparison.
+            </p>
+            <div class="empty-page__action">
+                <a href="#/dashboard" class="ds-btn ds-btn--secondary">Go to Dashboard</a>
+            </div>
+        </div>
+    </template>
+
+    <template id="tpl-digest">
+        <div class="empty-page" aria-labelledby="digest-heading">
+            <div class="empty-page__ornament" aria-hidden="true">
+                <div class="empty-page__ornament-inner"></div>
+            </div>
+            <p class="empty-page__eyebrow">Daily Digest</p>
+            <h1 class="empty-page__heading" id="digest-heading">Your 9AM briefing.</h1>
+            <p class="empty-page__sub">
+                Every morning, a curated summary of the highest-match roles will be compiled here — no noise, no
+                duplicates.
+            </p>
+            <div class="empty-page__action">
+                <a href="#/settings" class="ds-btn ds-btn--secondary">Set Preferences First</a>
+                <span class="ds-body-sm">Digest logic will be built in an upcoming step.</span>
+            </div>
+        </div>
+    </template>
+
+    <template id="tpl-proof">
+        <div class="proof-page">
+            <header class="proof-page__header">
+                <p class="page-header__eyebrow">Build Log</p>
+                <h1 class="page-header__heading"
+                    style="font-family: var(--font-serif); font-size: var(--text-2xl); font-weight: 600; letter-spacing: var(--tracking-tight); color: var(--color-text-primary); margin-bottom: var(--space-1);">
+                    Proof</h1>
+                <p class="page-header__sub">
+                    Artifacts, screenshots, and evidence of each build step will be collected here.
+                </p>
+            </header>
+
+            <div class="ds-card">
+                <div class="ds-card__body">
+                    <div class="ds-checklist"
+                        style="flex-direction: column; align-items: flex-start; gap: var(--space-2);">
+                        <span class="ds-checklist__item ds-checklist__item--done">
+                            <span class="ds-checklist__box" aria-hidden="true"></span>
+                            <span><strong>Design System</strong> — CSS tokens, typography, spacing, components</span>
+                        </span>
+                        <span class="ds-checklist__item ds-checklist__item--done">
+                            <span class="ds-checklist__box" aria-hidden="true"></span>
+                            <span><strong>Route Skeleton</strong> — Navigation shell, all routes, 404 page</span>
+                        </span>
+                        <span class="ds-checklist__item ds-checklist__item--done">
+                            <span class="ds-checklist__box" aria-hidden="true"></span>
+                            <span><strong>App Skeleton</strong> — Landing page, Settings UI, empty states</span>
+                        </span>
+                        <span class="ds-checklist__item">
+                            <span class="ds-checklist__box" aria-hidden="true"></span>
+                            <span><strong>Data Layer</strong> — Realistic job dataset loaded into dashboard</span>
+                        </span>
+                        <span class="ds-checklist__item">
+                            <span class="ds-checklist__box" aria-hidden="true"></span>
+                            <span><strong>Digest Logic</strong> — Daily 9AM summary generation</span>
+                        </span>
+                        <span class="ds-checklist__item">
+                            <span class="ds-checklist__box" aria-hidden="true"></span>
+                            <span><strong>Save &amp; Persist</strong> — Bookmarks stored in localStorage</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="tpl-404">
+        <div class="not-found-page" role="region" aria-label="Page not found">
+            <p class="not-found-page__code" aria-hidden="true">404</p>
+            <h1 class="not-found-page__heading">Page Not Found</h1>
+            <p class="not-found-page__sub">The page you are looking for does not exist.</p>
+            <a href="#/" class="ds-btn ds-btn--primary">Go to Home</a>
+        </div>
+    </template>
+
+    <!-- ══════════════════════════════════════════
+     ROUTER & APP LOGIC
 ══════════════════════════════════════════ -->
     <script>
         'use strict';
 
         /* ─────────────────────────────────────────
-           ROUTE DEFINITIONS
+           ROUTE MAP: segment → template ID + title
         ───────────────────────────────────────── */
         const ROUTES = {
-            '': { title: 'Home', heading: 'Welcome', eyebrow: 'Home' },
-            'dashboard': { title: 'Dashboard', heading: 'Dashboard', eyebrow: 'Overview' },
-            'saved': { title: 'Saved', heading: 'Saved Roles', eyebrow: 'Collection' },
-            'digest': { title: 'Digest', heading: 'Digest', eyebrow: 'Weekly Summary' },
-            'settings': { title: 'Settings', heading: 'Settings', eyebrow: 'Configuration' },
-            'proof': { title: 'Proof', heading: 'Proof', eyebrow: 'Build Log' },
+            '': { tpl: 'tpl-home', title: 'Home' },
+            'dashboard': { tpl: 'tpl-dashboard', title: 'Dashboard' },
+            'settings': { tpl: 'tpl-settings', title: 'Settings' },
+            'saved': { tpl: 'tpl-saved', title: 'Saved' },
+            'digest': { tpl: 'tpl-digest', title: 'Digest' },
+            'proof': { tpl: 'tpl-proof', title: 'Proof' },
         };
 
-        /* ─────────────────────────────────────────
-           HTML TEMPLATES
-        ───────────────────────────────────────── */
-        function renderPlaceholder(route) {
-            const { heading, eyebrow } = route;
-            return `
-      <div class="placeholder-page">
-        <p class="placeholder-page__eyebrow">${escHtml(eyebrow)}</p>
-        <h1 class="placeholder-page__heading">${escHtml(heading)}</h1>
-        <p class="placeholder-page__sub">This section will be built in the next step.</p>
-      </div>
-    `;
-        }
-
-        function renderNotFound(segment) {
-            return `
-      <div class="not-found-page" role="region" aria-label="Page not found">
-        <p class="not-found-page__code" aria-hidden="true">404</p>
-        <h1 class="not-found-page__heading">Page Not Found</h1>
-        <p class="not-found-page__sub">
-          The page you are looking for does not exist.
-          ${segment ? `<br><code style="font-size:var(--text-xs);color:var(--color-text-secondary);">/${escHtml(segment)}</code>` : ''}
-        </p>
-        <a href="#/" class="ds-btn ds-btn--primary">Go to Home</a>
-      </div>
-    `;
-        }
-
-        /* ─────────────────────────────────────────
-           ESCAPE HELPER (prevent XSS in route names)
-        ───────────────────────────────────────── */
-        function escHtml(str) {
-            return String(str)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;');
-        }
+        const outlet = document.getElementById('app-outlet');
 
         /* ─────────────────────────────────────────
            ROUTER
         ───────────────────────────────────────── */
-        const outlet = document.getElementById('app-outlet');
-
         function getSegment() {
-            // Hash format: #/dashboard → 'dashboard', #/ → '', #/unknown → 'unknown'
-            const hash = window.location.hash; // e.g. '#/dashboard'
-            const raw = hash.replace(/^#\/?/, '').split('/')[0].toLowerCase().trim();
-            return raw;
+            const hash = window.location.hash;
+            return hash.replace(/^#\/?/, '').split('/')[0].toLowerCase().trim();
         }
 
         function navigate() {
             const segment = getSegment();
             const route = ROUTES[segment];
+            const tplId = route ? route.tpl : 'tpl-404';
+            const tpl = document.getElementById(tplId);
 
-            // Render content
-            outlet.innerHTML = route ? renderPlaceholder(route) : renderNotFound(segment);
+            outlet.innerHTML = '';
+            if (tpl) {
+                outlet.appendChild(tpl.content.cloneNode(true));
+            }
 
-            // Update document title
             document.title = route
-                ? `${route.title} — Job Notification App`
-                : 'Not Found — Job Notification App';
+                ? `${route.title} — Job Notification Tracker`
+                : 'Not Found — Job Notification Tracker';
 
-            // Sync nav active states
             syncActiveLinks(segment);
-
-            // Close mobile drawer on navigation
             closeMobileDrawer();
-
-            // Scroll to top on route change
             window.scrollTo({ top: 0, behavior: 'instant' });
+
+            // Bind interactive elements after render
+            bindModeButtons();
+            bindLevelButtons();
         }
 
         /* ─────────────────────────────────────────
            ACTIVE LINK SYNC
         ───────────────────────────────────────── */
         function syncActiveLinks(segment) {
-            const allLinks = document.querySelectorAll('[data-route]');
-            allLinks.forEach(link => {
+            document.querySelectorAll('[data-route]').forEach(link => {
                 const matches = link.dataset.route === segment;
                 link.classList.toggle('is-active', matches);
                 link.setAttribute('aria-current', matches ? 'page' : 'false');
+            });
+        }
+
+        /* ─────────────────────────────────────────
+           SETTINGS — Mode / Level toggles (UI only)
+        ───────────────────────────────────────── */
+        function bindModeButtons() {
+            document.querySelectorAll('.ds-mode-group .ds-mode-option').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const group = btn.parentElement;
+                    group.querySelectorAll('.ds-mode-option').forEach(b => {
+                        b.classList.remove('is-selected');
+                        b.setAttribute('aria-pressed', 'false');
+                    });
+                    btn.classList.add('is-selected');
+                    btn.setAttribute('aria-pressed', 'true');
+                });
+            });
+        }
+
+        function bindLevelButtons() {
+            document.querySelectorAll('.ds-level-group .ds-level-option').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const group = btn.parentElement;
+                    group.querySelectorAll('.ds-level-option').forEach(b => {
+                        b.classList.remove('is-selected');
+                        b.setAttribute('aria-pressed', 'false');
+                    });
+                    btn.classList.add('is-selected');
+                    btn.setAttribute('aria-pressed', 'true');
+                });
             });
         }
 
@@ -482,7 +1068,6 @@
             hamburger.setAttribute('aria-expanded', 'false');
             hamburger.setAttribute('aria-label', 'Open navigation menu');
         }
-
         function openMobileDrawer() {
             drawer.classList.add('is-open');
             hamburger.setAttribute('aria-expanded', 'true');
@@ -490,18 +1075,13 @@
         }
 
         hamburger.addEventListener('click', () => {
-            const isOpen = drawer.classList.contains('is-open');
-            isOpen ? closeMobileDrawer() : openMobileDrawer();
+            drawer.classList.contains('is-open') ? closeMobileDrawer() : openMobileDrawer();
         });
 
-        // Close drawer when clicking outside
         document.addEventListener('click', (e) => {
-            if (!e.target.closest('.app-nav')) {
-                closeMobileDrawer();
-            }
+            if (!e.target.closest('.app-nav')) closeMobileDrawer();
         });
 
-        // Close drawer on Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeMobileDrawer();
         });
@@ -509,11 +1089,8 @@
         /* ─────────────────────────────────────────
            BOOTSTRAP
         ───────────────────────────────────────── */
-
-        // Listen for hash changes (back/forward, link clicks)
         window.addEventListener('hashchange', navigate);
 
-        // Default root redirect: if no hash, set to #/
         if (!window.location.hash || window.location.hash === '#') {
             window.location.replace('#/');
         } else {
