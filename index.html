@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Job Notification App</title>
+    <meta name="description" content="Track the roles you care about. Get notified when they appear." />
+    <link rel="stylesheet" href="design-system.css" />
+
+    <style>
+        /* ─────────────────────────────────────────
+       APP SHELL — Navigation + Router styles
+       Not part of the design system; app-specific
+    ───────────────────────────────────────── */
+
+        /* ── NAV BAR ── */
+        .app-nav {
+            position: sticky;
+            top: 0;
+            z-index: var(--z-topbar);
+            background-color: var(--color-surface);
+            border-bottom: var(--border);
+        }
+
+        .app-nav__inner {
+            max-width: var(--max-layout-width);
+            margin: 0 auto;
+            height: var(--topbar-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--space-4);
+        }
+
+        /* Brand */
+        .app-nav__brand {
+            font-family: var(--font-serif);
+            font-size: var(--text-md);
+            font-weight: 600;
+            color: var(--color-text-primary);
+            letter-spacing: var(--tracking-tight);
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .app-nav__brand:hover {
+            color: var(--color-text-primary);
+        }
+
+        /* Nav links (desktop) */
+        .app-nav__links {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            list-style: none;
+        }
+
+        .app-nav__link {
+            display: inline-flex;
+            align-items: center;
+            height: var(--topbar-height);
+            padding: 0 var(--space-2);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            transition: color var(--transition), border-color var(--transition);
+            white-space: nowrap;
+        }
+
+        .app-nav__link:hover {
+            color: var(--color-text-primary);
+        }
+
+        .app-nav__link.is-active {
+            color: var(--color-accent);
+            border-bottom-color: var(--color-accent);
+        }
+
+        /* ── HAMBURGER (mobile only) ── */
+        .app-nav__hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            width: 36px;
+            height: 36px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: var(--radius-sm);
+            transition: background-color var(--transition);
+        }
+
+        .app-nav__hamburger:hover {
+            background-color: var(--color-bg);
+        }
+
+        .app-nav__hamburger-bar {
+            display: block;
+            width: 20px;
+            height: 1.5px;
+            background-color: var(--color-text-primary);
+            border-radius: 2px;
+            transition: transform var(--transition-slow), opacity var(--transition);
+        }
+
+        /* Hamburger open state */
+        .app-nav__hamburger[aria-expanded="true"] .app-nav__hamburger-bar:nth-child(1) {
+            transform: translateY(6.5px) rotate(45deg);
+        }
+
+        .app-nav__hamburger[aria-expanded="true"] .app-nav__hamburger-bar:nth-child(2) {
+            opacity: 0;
+        }
+
+        .app-nav__hamburger[aria-expanded="true"] .app-nav__hamburger-bar:nth-child(3) {
+            transform: translateY(-6.5px) rotate(-45deg);
+        }
+
+        /* ── MOBILE DRAWER ── */
+        .app-nav__drawer {
+            display: none;
+            /* shown via JS class */
+            flex-direction: column;
+            background-color: var(--color-surface);
+            border-bottom: var(--border);
+            padding: var(--space-1) 0 var(--space-2);
+        }
+
+        .app-nav__drawer.is-open {
+            display: flex;
+        }
+
+        .app-nav__drawer-link {
+            display: flex;
+            align-items: center;
+            height: 44px;
+            padding: 0 var(--space-4);
+            font-size: var(--text-base);
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            border-left: 3px solid transparent;
+            transition: color var(--transition), border-color var(--transition), background-color var(--transition);
+        }
+
+        .app-nav__drawer-link:hover {
+            color: var(--color-text-primary);
+            background-color: var(--color-bg);
+        }
+
+        .app-nav__drawer-link.is-active {
+            color: var(--color-accent);
+            border-left-color: var(--color-accent);
+        }
+
+        /* ── PAGE OUTLET ── */
+        #app-outlet {
+            flex: 1;
+        }
+
+        /* ── PLACEHOLDER PAGE ── */
+        .placeholder-page {
+            min-height: calc(100vh - var(--topbar-height) - 57px);
+            /* minus nav + footer */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            max-width: var(--max-layout-width);
+            margin: 0 auto;
+            padding: var(--space-5) var(--space-4);
+        }
+
+        .placeholder-page__eyebrow {
+            font-size: var(--text-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: var(--tracking-wide);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-2);
+        }
+
+        .placeholder-page__heading {
+            font-family: var(--font-serif);
+            font-size: var(--text-3xl);
+            font-weight: 600;
+            line-height: var(--leading-tight);
+            letter-spacing: var(--tracking-tight);
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-2);
+            max-width: var(--max-text-width);
+        }
+
+        .placeholder-page__sub {
+            font-size: var(--text-md);
+            color: var(--color-text-secondary);
+            line-height: var(--leading-relaxed);
+            max-width: 480px;
+        }
+
+        /* ── 404 PAGE ── */
+        .not-found-page {
+            min-height: calc(100vh - var(--topbar-height) - 57px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: var(--space-5) var(--space-4);
+        }
+
+        .not-found-page__code {
+            font-family: var(--font-serif);
+            font-size: 96px;
+            font-weight: 700;
+            color: var(--color-border);
+            line-height: 1;
+            letter-spacing: -0.04em;
+            margin-bottom: var(--space-2);
+            user-select: none;
+        }
+
+        .not-found-page__heading {
+            font-family: var(--font-serif);
+            font-size: var(--text-xl);
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-1);
+        }
+
+        .not-found-page__sub {
+            font-size: var(--text-base);
+            color: var(--color-text-secondary);
+            line-height: var(--leading-relaxed);
+            max-width: 400px;
+            margin-bottom: var(--space-3);
+        }
+
+        /* ── PROOF FOOTER ── */
+        .app-footer {
+            border-top: var(--border);
+            background-color: var(--color-surface);
+            padding: var(--space-2) var(--space-4);
+        }
+
+        .app-footer__inner {
+            max-width: var(--max-layout-width);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            flex-wrap: wrap;
+        }
+
+        .app-footer__label {
+            font-size: var(--text-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: var(--tracking-wide);
+            color: var(--color-text-secondary);
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 640px) {
+            .app-nav__links {
+                display: none;
+            }
+
+            .app-nav__hamburger {
+                display: flex;
+            }
+
+            .app-nav__inner {
+                padding: 0 var(--space-3);
+            }
+
+            .placeholder-page__heading {
+                font-size: var(--text-2xl);
+            }
+
+            .not-found-page__code {
+                font-size: 64px;
+            }
+
+            .placeholder-page {
+                padding: var(--space-4) var(--space-3);
+                justify-content: flex-start;
+                padding-top: var(--space-5);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ══════════════════════════════════════════
+     TOP NAVIGATION
+══════════════════════════════════════════ -->
+    <nav class="app-nav" role="navigation" aria-label="Main navigation">
+        <div class="app-nav__inner">
+            <!-- Brand -->
+            <a href="#/" class="app-nav__brand" aria-label="Job Notification App home">
+                Job Notification App
+            </a>
+
+            <!-- Desktop links -->
+            <ul class="app-nav__links" role="list">
+                <li><a href="#/dashboard" class="app-nav__link" data-route="dashboard">Dashboard</a></li>
+                <li><a href="#/saved" class="app-nav__link" data-route="saved">Saved</a></li>
+                <li><a href="#/digest" class="app-nav__link" data-route="digest">Digest</a></li>
+                <li><a href="#/settings" class="app-nav__link" data-route="settings">Settings</a></li>
+                <li><a href="#/proof" class="app-nav__link" data-route="proof">Proof</a></li>
+            </ul>
+
+            <!-- Mobile hamburger -->
+            <button class="app-nav__hamburger" id="hamburger-btn" aria-expanded="false" aria-controls="mobile-drawer"
+                aria-label="Open navigation menu">
+                <span class="app-nav__hamburger-bar"></span>
+                <span class="app-nav__hamburger-bar"></span>
+                <span class="app-nav__hamburger-bar"></span>
+            </button>
+        </div>
+
+        <!-- Mobile drawer -->
+        <div class="app-nav__drawer" id="mobile-drawer" role="list" aria-label="Mobile navigation">
+            <a href="#/dashboard" class="app-nav__drawer-link" data-route="dashboard" role="listitem">Dashboard</a>
+            <a href="#/saved" class="app-nav__drawer-link" data-route="saved" role="listitem">Saved</a>
+            <a href="#/digest" class="app-nav__drawer-link" data-route="digest" role="listitem">Digest</a>
+            <a href="#/settings" class="app-nav__drawer-link" data-route="settings" role="listitem">Settings</a>
+            <a href="#/proof" class="app-nav__drawer-link" data-route="proof" role="listitem">Proof</a>
+        </div>
+    </nav>
+
+    <!-- ══════════════════════════════════════════
+     PAGE OUTLET (router renders here)
+══════════════════════════════════════════ -->
+    <main id="app-outlet" role="main" aria-live="polite" aria-atomic="true"></main>
+
+    <!-- ══════════════════════════════════════════
+     PROOF FOOTER
+══════════════════════════════════════════ -->
+    <footer class="app-footer" role="contentinfo">
+        <div class="app-footer__inner">
+            <span class="app-footer__label">Build status</span>
+            <div class="ds-checklist">
+                <span class="ds-checklist__item ds-checklist__item--done">
+                    <span class="ds-checklist__box" aria-hidden="true"></span>
+                    UI Built
+                </span>
+                <span class="ds-checklist__item ds-checklist__item--done">
+                    <span class="ds-checklist__box" aria-hidden="true"></span>
+                    Logic Working
+                </span>
+                <span class="ds-checklist__item">
+                    <span class="ds-checklist__box" aria-hidden="true"></span>
+                    Test Passed
+                </span>
+                <span class="ds-checklist__item">
+                    <span class="ds-checklist__box" aria-hidden="true"></span>
+                    Deployed
+                </span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ══════════════════════════════════════════
+     ROUTER & NAV LOGIC
+══════════════════════════════════════════ -->
+    <script>
+        'use strict';
+
+        /* ─────────────────────────────────────────
+           ROUTE DEFINITIONS
+        ───────────────────────────────────────── */
+        const ROUTES = {
+            '': { title: 'Home', heading: 'Welcome', eyebrow: 'Home' },
+            'dashboard': { title: 'Dashboard', heading: 'Dashboard', eyebrow: 'Overview' },
+            'saved': { title: 'Saved', heading: 'Saved Roles', eyebrow: 'Collection' },
+            'digest': { title: 'Digest', heading: 'Digest', eyebrow: 'Weekly Summary' },
+            'settings': { title: 'Settings', heading: 'Settings', eyebrow: 'Configuration' },
+            'proof': { title: 'Proof', heading: 'Proof', eyebrow: 'Build Log' },
+        };
+
+        /* ─────────────────────────────────────────
+           HTML TEMPLATES
+        ───────────────────────────────────────── */
+        function renderPlaceholder(route) {
+            const { heading, eyebrow } = route;
+            return `
+      <div class="placeholder-page">
+        <p class="placeholder-page__eyebrow">${escHtml(eyebrow)}</p>
+        <h1 class="placeholder-page__heading">${escHtml(heading)}</h1>
+        <p class="placeholder-page__sub">This section will be built in the next step.</p>
+      </div>
+    `;
+        }
+
+        function renderNotFound(segment) {
+            return `
+      <div class="not-found-page" role="region" aria-label="Page not found">
+        <p class="not-found-page__code" aria-hidden="true">404</p>
+        <h1 class="not-found-page__heading">Page Not Found</h1>
+        <p class="not-found-page__sub">
+          The page you are looking for does not exist.
+          ${segment ? `<br><code style="font-size:var(--text-xs);color:var(--color-text-secondary);">/${escHtml(segment)}</code>` : ''}
+        </p>
+        <a href="#/" class="ds-btn ds-btn--primary">Go to Home</a>
+      </div>
+    `;
+        }
+
+        /* ─────────────────────────────────────────
+           ESCAPE HELPER (prevent XSS in route names)
+        ───────────────────────────────────────── */
+        function escHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        /* ─────────────────────────────────────────
+           ROUTER
+        ───────────────────────────────────────── */
+        const outlet = document.getElementById('app-outlet');
+
+        function getSegment() {
+            // Hash format: #/dashboard → 'dashboard', #/ → '', #/unknown → 'unknown'
+            const hash = window.location.hash; // e.g. '#/dashboard'
+            const raw = hash.replace(/^#\/?/, '').split('/')[0].toLowerCase().trim();
+            return raw;
+        }
+
+        function navigate() {
+            const segment = getSegment();
+            const route = ROUTES[segment];
+
+            // Render content
+            outlet.innerHTML = route ? renderPlaceholder(route) : renderNotFound(segment);
+
+            // Update document title
+            document.title = route
+                ? `${route.title} — Job Notification App`
+                : 'Not Found — Job Notification App';
+
+            // Sync nav active states
+            syncActiveLinks(segment);
+
+            // Close mobile drawer on navigation
+            closeMobileDrawer();
+
+            // Scroll to top on route change
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        /* ─────────────────────────────────────────
+           ACTIVE LINK SYNC
+        ───────────────────────────────────────── */
+        function syncActiveLinks(segment) {
+            const allLinks = document.querySelectorAll('[data-route]');
+            allLinks.forEach(link => {
+                const matches = link.dataset.route === segment;
+                link.classList.toggle('is-active', matches);
+                link.setAttribute('aria-current', matches ? 'page' : 'false');
+            });
+        }
+
+        /* ─────────────────────────────────────────
+           MOBILE HAMBURGER
+        ───────────────────────────────────────── */
+        const hamburger = document.getElementById('hamburger-btn');
+        const drawer = document.getElementById('mobile-drawer');
+
+        function closeMobileDrawer() {
+            drawer.classList.remove('is-open');
+            hamburger.setAttribute('aria-expanded', 'false');
+            hamburger.setAttribute('aria-label', 'Open navigation menu');
+        }
+
+        function openMobileDrawer() {
+            drawer.classList.add('is-open');
+            hamburger.setAttribute('aria-expanded', 'true');
+            hamburger.setAttribute('aria-label', 'Close navigation menu');
+        }
+
+        hamburger.addEventListener('click', () => {
+            const isOpen = drawer.classList.contains('is-open');
+            isOpen ? closeMobileDrawer() : openMobileDrawer();
+        });
+
+        // Close drawer when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.app-nav')) {
+                closeMobileDrawer();
+            }
+        });
+
+        // Close drawer on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeMobileDrawer();
+        });
+
+        /* ─────────────────────────────────────────
+           BOOTSTRAP
+        ───────────────────────────────────────── */
+
+        // Listen for hash changes (back/forward, link clicks)
+        window.addEventListener('hashchange', navigate);
+
+        // Default root redirect: if no hash, set to #/
+        if (!window.location.hash || window.location.hash === '#') {
+            window.location.replace('#/');
+        } else {
+            navigate();
+        }
+    </script>
+
+</body>
+
+</html>
