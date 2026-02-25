@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Job Notification App — Design System</title>
+  <meta name="description" content="Design system foundation for Job Notification App. B2C SaaS product design language." />
+  <link rel="stylesheet" href="design-system.css" />
+
+  <style>
+    /* ── Demo-only overrides (not part of the design system) ── */
+    .demo-section {
+      padding: var(--space-4) 0;
+      border-bottom: var(--border);
+    }
+    .demo-section:last-child { border-bottom: none; }
+    .demo-section__title {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-wide);
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-3);
+      padding-bottom: var(--space-1);
+      border-bottom: var(--border);
+    }
+    .demo-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      margin-bottom: var(--space-2);
+    }
+    .demo-swatch {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius);
+      border: var(--border);
+      flex-shrink: 0;
+    }
+    .demo-token-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-sm);
+      margin-bottom: var(--space-1);
+    }
+    .demo-token-name {
+      font-family: 'Menlo', 'Consolas', monospace;
+      font-size: var(--text-xs);
+      color: var(--color-accent);
+      min-width: 240px;
+    }
+    .demo-token-value {
+      color: var(--color-text-secondary);
+      font-size: var(--text-xs);
+    }
+    .showcase-nav {
+      position: fixed;
+      left: 0;
+      top: var(--topbar-height);
+      bottom: 0;
+      width: 200px;
+      background-color: var(--color-surface);
+      border-right: var(--border);
+      overflow-y: auto;
+      padding: var(--space-3) var(--space-2);
+      z-index: var(--z-raised);
+    }
+    .showcase-nav__title {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-wide);
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-2);
+    }
+    .showcase-nav__link {
+      display: block;
+      padding: 6px var(--space-1);
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      border-radius: var(--radius-sm);
+      transition: background-color var(--transition), color var(--transition);
+    }
+    .showcase-nav__link:hover {
+      background-color: var(--color-bg);
+      color: var(--color-text-primary);
+    }
+    .showcase-main {
+      margin-left: 200px;
+      padding: var(--space-4);
+      max-width: 960px;
+    }
+    @media (max-width: 1024px) {
+      .showcase-nav { display: none; }
+      .showcase-main { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     TOP BAR
+══════════════════════════════════════════ -->
+<header class="ds-topbar" role="banner">
+  <span class="ds-topbar__brand">Job Notification App</span>
+  <div class="ds-flex ds-items-center ds-gap-2">
+    <div class="ds-progress-steps" aria-label="Progress: Step 1 of 4">
+      <div class="ds-progress-step ds-progress-step--done"  title="Step 1 done"></div>
+      <div class="ds-progress-step ds-progress-step--active" title="Step 2 active"></div>
+      <div class="ds-progress-step" title="Step 3"></div>
+      <div class="ds-progress-step" title="Step 4"></div>
+    </div>
+    <span class="ds-topbar__progress">Step 2 / 4</span>
+  </div>
+  <div>
+    <span class="ds-badge ds-badge--warning" aria-label="Status: In Progress">In Progress</span>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════
+     SIDEBAR NAV (Showcase-only)
+══════════════════════════════════════════ -->
+<nav class="showcase-nav" aria-label="Design system sections">
+  <p class="showcase-nav__title">Design System</p>
+  <a href="#colors"      class="showcase-nav__link">Color Tokens</a>
+  <a href="#typography"  class="showcase-nav__link">Typography</a>
+  <a href="#spacing"     class="showcase-nav__link">Spacing</a>
+  <a href="#buttons"     class="showcase-nav__link">Buttons</a>
+  <a href="#inputs"      class="showcase-nav__link">Form Inputs</a>
+  <a href="#badges"      class="showcase-nav__link">Badges</a>
+  <a href="#alerts"      class="showcase-nav__link">Alerts</a>
+  <a href="#cards"       class="showcase-nav__link">Cards</a>
+  <a href="#layout"      class="showcase-nav__link">Layout</a>
+  <a href="#states"      class="showcase-nav__link">States</a>
+  <a href="#table"       class="showcase-nav__link">Table</a>
+  <a href="#footer"      class="showcase-nav__link">Proof Footer</a>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     MAIN SHOWCASE CONTENT
+══════════════════════════════════════════ -->
+<main class="showcase-main" id="main-content">
+
+  <!-- Page intro -->
+  <div style="padding-bottom: var(--space-4); border-bottom: var(--border); margin-bottom: 0;">
+    <p class="ds-eyebrow ds-mb-2">Foundation</p>
+    <h1 class="ds-h1 ds-mb-2">Design System</h1>
+    <p class="ds-body-lg ds-text-muted">
+      The complete visual and interaction language for Job Notification App.
+      Every token, component, and layout rule is documented here.
+    </p>
+  </div>
+
+  <!-- ── 1. COLOR TOKENS ── -->
+  <section class="demo-section" id="colors">
+    <p class="demo-section__title">1 · Color Tokens</p>
+
+    <p class="ds-body-sm ds-mb-3">Maximum 4 core colors across the entire UI. All values are defined as CSS custom properties.</p>
+
+    <div class="ds-card ds-mb-3">
+      <div class="ds-card__header">
+        <span class="ds-card__title">Core Palette</span>
+      </div>
+      <div class="ds-card__body">
+        <div class="demo-token-row">
+          <div class="demo-swatch" style="background:#F7F6F3;"></div>
+          <div>
+            <div class="demo-token-name">--color-bg</div>
+            <div class="demo-token-value">#F7F6F3 · Page background (off-white)</div>
+          </div>
+        </div>
+        <div class="demo-token-row">
+          <div class="demo-swatch" style="background:#FFFFFF;"></div>
+          <div>
+            <div class="demo-token-name">--color-surface</div>
+            <div class="demo-token-value">#FFFFFF · Card and panel surface</div>
+          </div>
+        </div>
+        <div class="demo-token-row">
+          <div class="demo-swatch" style="background:#111111;"></div>
+          <div>
+            <div class="demo-token-name">--color-text-primary</div>
+            <div class="demo-token-value">#111111 · Primary copy</div>
+          </div>
+        </div>
+        <div class="demo-token-row">
+          <div class="demo-swatch" style="background:#8B0000;"></div>
+          <div>
+            <div class="demo-token-name">--color-accent</div>
+            <div class="demo-token-value">#8B0000 · Deep red · Primary action &amp; error</div>
+          </div>
+        </div>
+        <div class="demo-token-row">
+          <div class="demo-swatch" style="background:#3A6B35;"></div>
+          <div>
+            <div class="demo-token-name">--color-success</div>
+            <div class="demo-token-value">#3A6B35 · Muted forest green</div>
+          </div>
+        </div>
+        <div class="demo-token-row">
+          <div class="demo-swatch" style="background:#8A6200;"></div>
+          <div>
+            <div class="demo-token-name">--color-warning</div>
+            <div class="demo-token-value">#8A6200 · Muted amber</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 2. TYPOGRAPHY ── -->
+  <section class="demo-section" id="typography">
+    <p class="demo-section__title">2 · Typography</p>
+
+    <p class="ds-body-sm ds-mb-3">Headings use <strong>Playfair Display</strong> (serif). Body uses <strong>Inter</strong> (sans-serif). No decorative fonts. No random sizes.</p>
+
+    <div class="ds-card">
+      <div class="ds-card__header"><span class="ds-card__title">Type Scale</span></div>
+      <div class="ds-card__body" style="gap: var(--space-3);">
+        <div>
+          <p class="ds-caption ds-mb-1">.ds-h1 — 52px Playfair 600</p>
+          <h1 class="ds-h1" style="max-width:none;">Job Notification App</h1>
+        </div>
+        <hr class="ds-divider ds-divider--sm">
+        <div>
+          <p class="ds-caption ds-mb-1">.ds-h2 — 40px Playfair 600</p>
+          <h2 class="ds-h2" style="max-width:none;">Your applications, organized</h2>
+        </div>
+        <hr class="ds-divider ds-divider--sm">
+        <div>
+          <p class="ds-caption ds-mb-1">.ds-h3 — 32px Playfair 500</p>
+          <h3 class="ds-h3" style="max-width:none;">Role Preferences</h3>
+        </div>
+        <hr class="ds-divider ds-divider--sm">
+        <div>
+          <p class="ds-caption ds-mb-1">.ds-h4 — 24px Playfair 500</p>
+          <h4 class="ds-h4" style="max-width:none;">Notification Settings</h4>
+        </div>
+        <hr class="ds-divider ds-divider--sm">
+        <div>
+          <p class="ds-caption ds-mb-1">.ds-body-lg — 18px Inter, line-height 1.8</p>
+          <p class="ds-body-lg" style="max-width:none;">We watch the roles you care about and surface the right signal at the right time.</p>
+        </div>
+        <hr class="ds-divider ds-divider--sm">
+        <div>
+          <p class="ds-caption ds-mb-1">.ds-body — 16px Inter, line-height 1.6, max-width 720px</p>
+          <p class="ds-body">Set your preferences once. We handle the rest — filtering noise, tracking deadlines, and surfacing only what is relevant to your search.</p>
+        </div>
+        <hr class="ds-divider ds-divider--sm">
+        <div>
+          <p class="ds-caption ds-mb-1">.ds-body-sm — 14px muted</p>
+          <p class="ds-body-sm">Last updated 3 minutes ago · Source: LinkedIn, Indeed</p>
+        </div>
+        <hr class="ds-divider ds-divider--sm">
+        <div>
+          <p class="ds-caption ds-mb-1">.ds-caption — 12px uppercase tracked</p>
+          <p class="ds-caption">Section label · System status</p>
+        </div>
+        <hr class="ds-divider ds-divider--sm">
+        <div>
+          <p class="ds-caption ds-mb-1">.ds-eyebrow — 12px uppercase tracked (section intro)</p>
+          <p class="ds-eyebrow">Step 1 of 4</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 3. SPACING ── -->
+  <section class="demo-section" id="spacing">
+    <p class="demo-section__title">3 · Spacing Scale</p>
+    <p class="ds-body-sm ds-mb-3">Only five values exist. Never use arbitrary values like 13px or 27px.</p>
+    <div class="ds-card">
+      <div class="ds-card__body">
+        <div class="demo-token-row"><div class="demo-token-name">--space-1</div><div class="demo-token-value">8px</div><div style="width:8px;height:8px;background:var(--color-accent);border-radius:2px;"></div></div>
+        <div class="demo-token-row"><div class="demo-token-name">--space-2</div><div class="demo-token-value">16px</div><div style="width:16px;height:8px;background:var(--color-accent);border-radius:2px;"></div></div>
+        <div class="demo-token-row"><div class="demo-token-name">--space-3</div><div class="demo-token-value">24px</div><div style="width:24px;height:8px;background:var(--color-accent);border-radius:2px;"></div></div>
+        <div class="demo-token-row"><div class="demo-token-name">--space-4</div><div class="demo-token-value">40px</div><div style="width:40px;height:8px;background:var(--color-accent);border-radius:2px;"></div></div>
+        <div class="demo-token-row"><div class="demo-token-name">--space-5</div><div class="demo-token-value">64px</div><div style="width:64px;height:8px;background:var(--color-accent);border-radius:2px;"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 4. BUTTONS ── -->
+  <section class="demo-section" id="buttons">
+    <p class="demo-section__title">4 · Buttons</p>
+    <p class="ds-body-sm ds-mb-3">Same border radius everywhere. Transitions at 150ms ease-in-out. No bounce.</p>
+
+    <div class="ds-card ds-mb-3">
+      <div class="ds-card__header"><span class="ds-card__title">Variants</span></div>
+      <div class="ds-card__body">
+        <div class="demo-row">
+          <button class="ds-btn ds-btn--primary">Apply Now</button>
+          <button class="ds-btn ds-btn--secondary">Save Draft</button>
+          <button class="ds-btn ds-btn--ghost">Dismiss</button>
+          <button class="ds-btn ds-btn--danger">Remove Role</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-card ds-mb-3">
+      <div class="ds-card__header"><span class="ds-card__title">Sizes</span></div>
+      <div class="ds-card__body">
+        <div class="demo-row ds-items-center">
+          <button class="ds-btn ds-btn--primary ds-btn--sm">Small</button>
+          <button class="ds-btn ds-btn--primary">Default</button>
+          <button class="ds-btn ds-btn--primary ds-btn--lg">Large</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-card">
+      <div class="ds-card__header"><span class="ds-card__title">Disabled State</span></div>
+      <div class="ds-card__body">
+        <div class="demo-row">
+          <button class="ds-btn ds-btn--primary" disabled>Apply Now</button>
+          <button class="ds-btn ds-btn--secondary" disabled>Save Draft</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 5. FORM INPUTS ── -->
+  <section class="demo-section" id="inputs">
+    <p class="demo-section__title">5 · Form Inputs</p>
+    <p class="ds-body-sm ds-mb-3">Clean borders, clear focus state using the accent color. Never rely on color alone to convey meaning.</p>
+
+    <div class="ds-card">
+      <div class="ds-card__body" style="max-width:560px;">
+        <div class="ds-field">
+          <label class="ds-field__label" for="demo-role">
+            Target Role <span class="ds-field__required" aria-hidden="true">*</span>
+          </label>
+          <input id="demo-role" class="ds-input" type="text" placeholder="e.g. Senior Product Manager" />
+          <span class="ds-field__hint">We use this to personalise your alerts.</span>
+        </div>
+
+        <div class="ds-field">
+          <label class="ds-field__label" for="demo-location">Location</label>
+          <div class="ds-select-wrapper">
+            <select id="demo-location" class="ds-select">
+              <option value="">Select a location</option>
+              <option>Remote</option>
+              <option>Bengaluru, IN</option>
+              <option>Mumbai, IN</option>
+              <option>London, UK</option>
+              <option>New York, US</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="ds-field">
+          <label class="ds-field__label" for="demo-notes">Notes</label>
+          <textarea id="demo-notes" class="ds-textarea" placeholder="Add any specific requirements for this role…"></textarea>
+        </div>
+
+        <div class="ds-field">
+          <label class="ds-field__label" for="demo-email-err">
+            Email <span class="ds-field__required" aria-hidden="true">*</span>
+          </label>
+          <input id="demo-email-err" class="ds-input ds-input--error" type="email" value="notavalidemail" aria-describedby="email-err-msg" />
+          <span class="ds-field__error-msg" id="email-err-msg" role="alert">
+            Enter a valid email address, for example: you@company.com
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 6. BADGES ── -->
+  <section class="demo-section" id="badges">
+    <p class="demo-section__title">6 · Badges &amp; Status</p>
+    <p class="ds-body-sm ds-mb-3">Used in the top bar, tables, and cards. Pill-shaped with a small dot indicator.</p>
+    <div class="ds-card">
+      <div class="ds-card__body">
+        <div class="demo-row">
+          <span class="ds-badge ds-badge--default">Not Started</span>
+          <span class="ds-badge ds-badge--accent">In Progress</span>
+          <span class="ds-badge ds-badge--success">Shipped</span>
+          <span class="ds-badge ds-badge--warning">On Hold</span>
+        </div>
+        <div class="demo-row">
+          <span class="ds-badge ds-badge--default ds-badge--no-dot">Remote</span>
+          <span class="ds-badge ds-badge--success ds-badge--no-dot">Full-time</span>
+          <span class="ds-badge ds-badge--warning ds-badge--no-dot">Contract</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 7. ALERTS ── -->
+  <section class="demo-section" id="alerts">
+    <p class="demo-section__title">7 · Alerts &amp; Notifications</p>
+    <p class="ds-body-sm ds-mb-3">
+      Errors must clearly explain what went wrong and how to fix it. Never blame the user.
+    </p>
+    <div class="ds-flex-col ds-gap-2">
+      <div class="ds-alert ds-alert--error" role="alert">
+        <span class="ds-alert__icon" aria-hidden="true">○</span>
+        <div class="ds-alert__content">
+          <p class="ds-alert__title">Unable to save your preferences</p>
+          <p class="ds-alert__message">There was a network issue. Your changes have been stored locally. Try again in a moment and we will sync them automatically.</p>
+        </div>
+      </div>
+
+      <div class="ds-alert ds-alert--success" role="status">
+        <span class="ds-alert__icon" aria-hidden="true">✓</span>
+        <div class="ds-alert__content">
+          <p class="ds-alert__title">Preferences saved</p>
+          <p class="ds-alert__message">You will now receive alerts for Senior Product Manager roles in Bengaluru.</p>
+        </div>
+      </div>
+
+      <div class="ds-alert ds-alert--warning" role="alert">
+        <span class="ds-alert__icon" aria-hidden="true">!</span>
+        <div class="ds-alert__content">
+          <p class="ds-alert__title">Alert quota almost reached</p>
+          <p class="ds-alert__message">You are using 9 of 10 available notification rules. Remove a rule or upgrade your plan to add more.</p>
+        </div>
+      </div>
+
+      <div class="ds-alert ds-alert--info">
+        <span class="ds-alert__icon" aria-hidden="true">i</span>
+        <div class="ds-alert__content">
+          <p class="ds-alert__title">How alerts work</p>
+          <p class="ds-alert__message">We check job boards every 15 minutes and notify you only when a new match is found. No duplicate alerts.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 8. CARDS ── -->
+  <section class="demo-section" id="cards">
+    <p class="demo-section__title">8 · Cards</p>
+    <p class="ds-body-sm ds-mb-3">Subtle border, no drop shadows. Consistent padding using the spacing scale.</p>
+
+    <div class="ds-flex-col ds-gap-3">
+      <!-- Job listing card -->
+      <div class="ds-card">
+        <div class="ds-card__header">
+          <div>
+            <p class="ds-eyebrow ds-mb-1">LinkedIn · 2 hours ago</p>
+            <p class="ds-card__title">Senior Product Manager, Fintech</p>
+          </div>
+          <span class="ds-badge ds-badge--accent">New</span>
+        </div>
+        <div class="ds-card__body">
+          <p class="ds-body-sm">Bangalore, Karnataka · Full-time · ₹40–60 LPA</p>
+          <p class="ds-body" style="max-width:none;">
+            Lead product strategy for our payments infrastructure team. You will work cross-functionally with engineering, design, and compliance to ship customer-facing and developer-facing features.
+          </p>
+          <div class="demo-row ds-mt-2">
+            <button class="ds-btn ds-btn--primary ds-btn--sm">View Role</button>
+            <button class="ds-btn ds-btn--secondary ds-btn--sm">Save</button>
+            <button class="ds-btn ds-btn--ghost ds-btn--sm">Dismiss</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preference card -->
+      <div class="ds-card ds-card--sm">
+        <div class="ds-card__header">
+          <span class="ds-card__title" style="font-size:var(--text-base);">Alert Rule #2</span>
+          <span class="ds-badge ds-badge--success">Active</span>
+        </div>
+        <div class="ds-card__body">
+          <div class="ds-flex ds-gap-2 ds-flex-wrap">
+            <span class="ds-badge ds-badge--default ds-badge--no-dot">Product Manager</span>
+            <span class="ds-badge ds-badge--default ds-badge--no-dot">Remote</span>
+            <span class="ds-badge ds-badge--default ds-badge--no-dot">₹30L+</span>
+          </div>
+          <p class="ds-body-sm ds-mt-1">42 matches found · Last checked 8 min ago</p>
+        </div>
+        <div class="ds-card__footer">
+          <button class="ds-btn ds-btn--ghost ds-btn--sm">Edit</button>
+          <button class="ds-btn ds-btn--danger ds-btn--sm">Remove</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 9. LAYOUT DEMO ── -->
+  <section class="demo-section" id="layout">
+    <p class="demo-section__title">9 · Layout System</p>
+    <p class="ds-body-sm ds-mb-3">Every page uses: Top Bar → Context Header → Primary (70%) + Secondary (30%) → Proof Footer.</p>
+
+    <div class="ds-card ds-mb-3">
+      <div class="ds-card__header"><span class="ds-card__title">Page Shell Preview</span></div>
+      <div class="ds-card__body">
+        <!-- Miniature layout illustration -->
+        <div style="
+          border: var(--border);
+          border-radius: var(--radius);
+          overflow: hidden;
+          font-size: var(--text-xs);
+          color: var(--color-text-secondary);
+          background: var(--color-bg);
+        ">
+          <!-- Mini topbar -->
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 16px; background:var(--color-surface); border-bottom:var(--border);">
+            <span style="font-weight:600; color:var(--color-text-primary);">App Name</span>
+            <span>Step X / Y</span>
+            <span class="ds-badge ds-badge--warning ds-badge--no-dot" style="font-size:10px;">Status</span>
+          </div>
+          <!-- Mini context header -->
+          <div style="padding:16px; background:var(--color-surface); border-bottom:var(--border);">
+            <div style="height:10px; background:var(--color-border); border-radius:2px; width:200px; margin-bottom:6px;"></div>
+            <div style="height:6px; background:var(--color-bg); border-radius:2px; width:300px;"></div>
+          </div>
+          <!-- Mini workspace -->
+          <div style="display:grid; grid-template-columns:70% 30%; gap:8px; padding:16px;">
+            <div style="background:var(--color-surface); border:var(--border); border-radius:var(--radius); padding:16px; min-height:80px;">
+              <div style="font-size:10px; font-weight:500; margin-bottom:8px;">Primary Workspace</div>
+              <div style="height:6px; background:var(--color-bg); border-radius:2px; margin-bottom:4px;"></div>
+              <div style="height:6px; background:var(--color-bg); border-radius:2px; width:70%;"></div>
+            </div>
+            <div style="background:var(--color-surface); border:var(--border); border-radius:var(--radius); padding:16px; min-height:80px;">
+              <div style="font-size:10px; font-weight:500; margin-bottom:8px;">Secondary Panel</div>
+              <div style="height:6px; background:var(--color-bg); border-radius:2px; margin-bottom:4px;"></div>
+              <div style="height:6px; background:var(--color-bg); border-radius:2px; width:60%;"></div>
+            </div>
+          </div>
+          <!-- Mini footer -->
+          <div style="padding:8px 16px; background:var(--color-surface); border-top:var(--border); display:flex; gap:12px;">
+            <span>□ UI Built</span>
+            <span>□ Logic Working</span>
+            <span>□ Test Passed</span>
+            <span>□ Deployed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step panel + prompt box demo -->
+    <div style="display:grid; grid-template-columns:70% 30%; gap:var(--space-3);">
+      <div class="ds-card">
+        <div class="ds-card__header"><span class="ds-card__title">Primary Workspace Content</span></div>
+        <div class="ds-card__body">
+          <p class="ds-body" style="max-width:none;">The primary workspace holds the main task at hand — forms, listings, data views. It is predictable, uncluttered, and never crowded.</p>
+          <p class="ds-body" style="max-width:none;">Cards within the workspace use subtle borders and no drop shadows. All padding follows the spacing scale.</p>
+        </div>
+      </div>
+      <div class="ds-step-panel">
+        <p class="ds-step-panel__number">Step 2 of 4</p>
+        <p class="ds-step-panel__title">Configure Alerts</p>
+        <p class="ds-step-panel__body">Define what roles you want to track. You can add up to 10 alert rules on the free plan.</p>
+        <div class="ds-prompt-box">
+          <div class="ds-prompt-box__header">
+            <span class="ds-prompt-box__lang">Prompt</span>
+            <button class="ds-prompt-box__copy" onclick="copyPrompt(this)">Copy</button>
+          </div>
+          <pre class="ds-prompt-box__content">Search: "Product Manager"
+Filter: Remote, ₹30L+
+Source: LinkedIn, Naukri</pre>
+        </div>
+        <button class="ds-btn ds-btn--primary ds-w-full">Run Alert</button>
+        <button class="ds-btn ds-btn--secondary ds-w-full">Save Draft</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 10. EMPTY & ERROR STATES ── -->
+  <section class="demo-section" id="states">
+    <p class="demo-section__title">10 · Empty &amp; Error States</p>
+    <p class="ds-body-sm ds-mb-3">Never leave blank screens. Always guide the next action. Never blame the user.</p>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--space-3);">
+      <div class="ds-card">
+        <div class="ds-card__header"><span class="ds-card__title">Empty State</span></div>
+        <div class="ds-empty-state">
+          <div class="ds-empty-state__icon" aria-hidden="true">◯</div>
+          <p class="ds-empty-state__title">No alerts set up yet</p>
+          <p class="ds-empty-state__sub">Add your first role preference to start receiving curated job notifications.</p>
+          <button class="ds-btn ds-btn--primary ds-mt-2">Add Alert Rule</button>
+        </div>
+      </div>
+      <div class="ds-card">
+        <div class="ds-card__header"><span class="ds-card__title">Error State</span></div>
+        <div class="ds-empty-state">
+          <div class="ds-empty-state__icon" aria-hidden="true" style="border-color:var(--color-accent);color:var(--color-accent);">!</div>
+          <p class="ds-empty-state__title">Could not load your jobs</p>
+          <p class="ds-empty-state__sub">We ran into a problem fetching the latest listings. This is on our end — your preferences are safe.</p>
+          <button class="ds-btn ds-btn--primary ds-mt-2">Try Again</button>
+          <button class="ds-btn ds-btn--ghost ds-btn--sm" style="margin-top: var(--space-1);">Contact support</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 11. TABLE ── -->
+  <section class="demo-section" id="table">
+    <p class="demo-section__title">11 · Data Table</p>
+    <p class="ds-body-sm ds-mb-3">Clean, readable, minimal. No zebra striping. Hover state uses the background colour.</p>
+
+    <div class="ds-table-wrapper">
+      <table class="ds-table">
+        <thead>
+          <tr>
+            <th>Role</th>
+            <th>Company</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Senior PM, Fintech</strong></td>
+            <td>Razorpay</td>
+            <td>Bengaluru</td>
+            <td><span class="ds-badge ds-badge--accent">New</span></td>
+            <td class="ds-text-muted">2h ago</td>
+          </tr>
+          <tr>
+            <td><strong>Product Manager II</strong></td>
+            <td>Swiggy</td>
+            <td>Remote</td>
+            <td><span class="ds-badge ds-badge--success">Saved</span></td>
+            <td class="ds-text-muted">Yesterday</td>
+          </tr>
+          <tr>
+            <td><strong>Associate PM</strong></td>
+            <td>CRED</td>
+            <td>Bengaluru</td>
+            <td><span class="ds-badge ds-badge--default">Dismissed</span></td>
+            <td class="ds-text-muted">3 days ago</td>
+          </tr>
+          <tr>
+            <td><strong>Group PM, Growth</strong></td>
+            <td>PhonePe</td>
+            <td>Pune</td>
+            <td><span class="ds-badge ds-badge--warning">Expiring</span></td>
+            <td class="ds-text-muted">5 days ago</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── 12. PROOF FOOTER ── -->
+  <section class="demo-section" id="footer">
+    <p class="demo-section__title">12 · Proof Footer</p>
+    <p class="ds-body-sm ds-mb-3">Checklist style. Persists at the bottom of every page. Reflects build progress at a glance.</p>
+    <div class="ds-card">
+      <div class="ds-card__body">
+        <div class="ds-checklist">
+          <span class="ds-label ds-text-muted" style="margin-right:var(--space-1);">Build status:</span>
+          <span class="ds-checklist__item ds-checklist__item--done">
+            <span class="ds-checklist__box" aria-hidden="true"></span>
+            UI Built
+          </span>
+          <span class="ds-checklist__item ds-checklist__item--done">
+            <span class="ds-checklist__box" aria-hidden="true"></span>
+            Logic Working
+          </span>
+          <span class="ds-checklist__item">
+            <span class="ds-checklist__box" aria-hidden="true"></span>
+            Test Passed
+          </span>
+          <span class="ds-checklist__item">
+            <span class="ds-checklist__box" aria-hidden="true"></span>
+            Deployed
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ══════════════════════════════════════════
+     PROOF FOOTER (global)
+══════════════════════════════════════════ -->
+<footer class="ds-footer" role="contentinfo" id="proof-footer">
+  <div class="ds-footer__inner">
+    <span class="ds-footer__label">Build status</span>
+    <div class="ds-checklist">
+      <span class="ds-checklist__item ds-checklist__item--done">
+        <span class="ds-checklist__box" aria-hidden="true"></span>
+        UI Built
+      </span>
+      <span class="ds-checklist__item ds-checklist__item--done">
+        <span class="ds-checklist__box" aria-hidden="true"></span>
+        Logic Working
+      </span>
+      <span class="ds-checklist__item">
+        <span class="ds-checklist__box" aria-hidden="true"></span>
+        Test Passed
+      </span>
+      <span class="ds-checklist__item">
+        <span class="ds-checklist__box" aria-hidden="true"></span>
+        Deployed
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* Copy-to-clipboard for prompt boxes */
+  function copyPrompt(btn) {
+    const content = btn.closest('.ds-prompt-box').querySelector('.ds-prompt-box__content').textContent;
+    navigator.clipboard.writeText(content).then(() => {
+      const original = btn.textContent;
+      btn.textContent = 'Copied';
+      setTimeout(() => { btn.textContent = original; }, 1500);
+    }).catch(() => {
+      btn.textContent = 'Error';
+      setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
+    });
+  }
+</script>
+
+</body>
+</html>
