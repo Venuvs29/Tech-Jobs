@@ -7,18 +7,13 @@
     <title>Job Notification Tracker</title>
     <meta name="description" content="Precision-matched job discovery delivered daily at 9AM." />
     <link rel="stylesheet" href="design-system.css" />
-
     <style>
-        /* ─────────────────────────────────────────
-       APP SHELL
-    ───────────────────────────────────────── */
-
         /* ── NAV ── */
         .app-nav {
             position: sticky;
             top: 0;
             z-index: var(--z-topbar);
-            background-color: var(--color-surface);
+            background: var(--color-surface);
             border-bottom: var(--border);
         }
 
@@ -37,7 +32,6 @@
             font-size: var(--text-md);
             font-weight: 600;
             color: var(--color-text-primary);
-            letter-spacing: var(--tracking-tight);
             text-decoration: none;
             flex-shrink: 0;
         }
@@ -75,7 +69,6 @@
             border-bottom-color: var(--color-accent);
         }
 
-        /* ── HAMBURGER ── */
         .app-nav__hamburger {
             display: none;
             flex-direction: column;
@@ -116,7 +109,6 @@
             transform: translateY(-6.5px) rotate(-45deg);
         }
 
-        /* ── MOBILE DRAWER ── */
         .app-nav__drawer {
             display: none;
             flex-direction: column;
@@ -152,12 +144,7 @@
             border-left-color: var(--color-accent);
         }
 
-        /* ── OUTLET ── */
-        #app-outlet {
-            flex: 1;
-        }
-
-        /* ── PROOF FOOTER ── */
+        /* ── FOOTER ── */
         .app-footer {
             border-top: var(--border);
             background-color: var(--color-surface);
@@ -181,328 +168,14 @@
             color: var(--color-text-secondary);
         }
 
-        /* ══════════════════════════════════════
-       PAGE LAYOUTS
-    ══════════════════════════════════════ */
-
-        .page-container {
+        /* ── PAGE WRAPPERS ── */
+        .page-wrap {
             max-width: var(--max-layout-width);
             margin: 0 auto;
-            padding: var(--space-5) var(--space-4);
+            padding: var(--space-4);
             min-height: calc(100vh - var(--topbar-height) - 57px);
         }
 
-        /* ── LANDING PAGE ── */
-        .landing {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: center;
-            min-height: calc(100vh - var(--topbar-height) - 57px);
-            padding: var(--space-5) var(--space-4);
-            max-width: var(--max-layout-width);
-            margin: 0 auto;
-        }
-
-        .landing__eyebrow {
-            font-size: var(--text-xs);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: var(--tracking-wide);
-            color: var(--color-accent);
-            margin-bottom: var(--space-2);
-        }
-
-        .landing__headline {
-            font-family: var(--font-serif);
-            font-size: clamp(40px, 6vw, 64px);
-            font-weight: 700;
-            line-height: 1.15;
-            letter-spacing: -0.03em;
-            color: var(--color-text-primary);
-            max-width: 640px;
-            margin-bottom: var(--space-2);
-        }
-
-        .landing__subtext {
-            font-size: var(--text-md);
-            color: var(--color-text-secondary);
-            line-height: var(--leading-relaxed);
-            max-width: 480px;
-            margin-bottom: var(--space-4);
-        }
-
-        .landing__cta-row {
-            display: flex;
-            align-items: center;
-            gap: var(--space-2);
-            flex-wrap: wrap;
-        }
-
-        .landing__meta {
-            font-size: var(--text-sm);
-            color: var(--color-text-secondary);
-        }
-
-        .landing__divider {
-            width: 48px;
-            height: 2px;
-            background-color: var(--color-accent);
-            margin: var(--space-4) 0;
-            border: none;
-        }
-
-        .landing__value-props {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: var(--space-3);
-            max-width: 720px;
-            margin-top: var(--space-4);
-        }
-
-        .landing__prop {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-1);
-        }
-
-        .landing__prop-label {
-            font-size: var(--text-sm);
-            font-weight: 600;
-            color: var(--color-text-primary);
-        }
-
-        .landing__prop-sub {
-            font-size: var(--text-sm);
-            color: var(--color-text-secondary);
-            line-height: var(--leading-relaxed);
-        }
-
-        /* ── SETTINGS PAGE ── */
-        .settings-layout {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: var(--space-4);
-            align-items: start;
-        }
-
-        .settings-form {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-3);
-        }
-
-        .settings-section {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-2);
-        }
-
-        .settings-section__title {
-            font-family: var(--font-serif);
-            font-size: var(--text-lg);
-            font-weight: 500;
-            color: var(--color-text-primary);
-            padding-bottom: var(--space-1);
-            border-bottom: var(--border);
-            margin-bottom: var(--space-1);
-        }
-
-        /* Tag-style chip input preview */
-        .ds-tag-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--space-1);
-            padding: var(--space-1);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius);
-            background: var(--color-surface);
-            min-height: 44px;
-            align-items: center;
-            cursor: text;
-        }
-
-        .ds-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 3px 10px;
-            background-color: var(--color-bg);
-            border: var(--border);
-            border-radius: var(--radius-full);
-            font-size: var(--text-sm);
-            color: var(--color-text-primary);
-            font-weight: 500;
-        }
-
-        .ds-tag__remove {
-            font-size: 12px;
-            color: var(--color-text-secondary);
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 0;
-            line-height: 1;
-        }
-
-        .ds-tag-placeholder {
-            font-size: var(--text-sm);
-            color: var(--color-text-placeholder);
-        }
-
-        /* Mode button group */
-        .ds-mode-group {
-            display: flex;
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius);
-            overflow: hidden;
-        }
-
-        .ds-mode-option {
-            flex: 1;
-            padding: 10px var(--space-2);
-            font-size: var(--text-sm);
-            font-weight: 500;
-            text-align: center;
-            cursor: pointer;
-            background: var(--color-surface);
-            color: var(--color-text-secondary);
-            border: none;
-            border-right: var(--border);
-            transition: background-color var(--transition), color var(--transition);
-        }
-
-        .ds-mode-option:last-child {
-            border-right: none;
-        }
-
-        .ds-mode-option:hover {
-            background-color: var(--color-bg);
-            color: var(--color-text-primary);
-        }
-
-        .ds-mode-option.is-selected {
-            background-color: var(--color-accent-subtle);
-            color: var(--color-accent);
-            font-weight: 600;
-        }
-
-        /* Experience level slider track preview */
-        .ds-level-group {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: var(--space-1);
-        }
-
-        .ds-level-option {
-            padding: var(--space-1) var(--space-1);
-            font-size: var(--text-sm);
-            font-weight: 500;
-            text-align: center;
-            cursor: pointer;
-            background: var(--color-surface);
-            color: var(--color-text-secondary);
-            border: var(--border);
-            border-radius: var(--radius);
-            transition: background-color var(--transition), color var(--transition), border-color var(--transition);
-        }
-
-        .ds-level-option:hover {
-            border-color: var(--color-text-secondary);
-            color: var(--color-text-primary);
-        }
-
-        .ds-level-option.is-selected {
-            background-color: var(--color-accent-subtle);
-            color: var(--color-accent);
-            border-color: var(--color-accent);
-        }
-
-        /* Settings sidebar info card */
-        .settings-info {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-2);
-            position: sticky;
-            top: calc(var(--topbar-height) + var(--space-3));
-        }
-
-        /* ── SHARED EMPTY STATE ── */
-        .empty-page {
-            min-height: calc(100vh - var(--topbar-height) - 57px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: var(--space-5) var(--space-4);
-        }
-
-        .empty-page__ornament {
-            width: 56px;
-            height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: var(--border);
-            border-radius: 50%;
-            margin-bottom: var(--space-3);
-        }
-
-        .empty-page__ornament-inner {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            border: 1.5px solid var(--color-border);
-        }
-
-        .empty-page__eyebrow {
-            font-size: var(--text-xs);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: var(--tracking-wide);
-            color: var(--color-text-secondary);
-            margin-bottom: var(--space-1);
-        }
-
-        .empty-page__heading {
-            font-family: var(--font-serif);
-            font-size: var(--text-xl);
-            font-weight: 600;
-            color: var(--color-text-primary);
-            margin-bottom: var(--space-1);
-            max-width: 440px;
-        }
-
-        .empty-page__sub {
-            font-size: var(--text-base);
-            color: var(--color-text-secondary);
-            line-height: var(--leading-relaxed);
-            max-width: 400px;
-        }
-
-        .empty-page__action {
-            margin-top: var(--space-3);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--space-1);
-        }
-
-        /* ── PROOF PAGE ── */
-        .proof-page {
-            padding: var(--space-5) var(--space-4);
-            max-width: var(--max-layout-width);
-            margin: 0 auto;
-        }
-
-        .proof-page__header {
-            margin-bottom: var(--space-4);
-            padding-bottom: var(--space-3);
-            border-bottom: var(--border);
-        }
-
-        /* ── PAGE HEADER (reused on settings, proof) ── */
         .page-header {
             margin-bottom: var(--space-4);
         }
@@ -532,8 +205,577 @@
             max-width: var(--max-text-width);
         }
 
+        /* ── FILTER BAR ── */
+        .filter-bar {
+            background: var(--color-surface);
+            border: var(--border);
+            border-radius: var(--radius);
+            padding: var(--space-2) var(--space-3);
+            margin-bottom: var(--space-3);
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+            align-items: flex-end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-width: 140px;
+            flex: 1;
+        }
+
+        .filter-group--wide {
+            min-width: 200px;
+            flex: 2;
+        }
+
+        .filter-label {
+            font-size: var(--text-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: var(--tracking-wide);
+            color: var(--color-text-secondary);
+        }
+
+        .filter-input {
+            width: 100%;
+            padding: 8px var(--space-2);
+            font-family: var(--font-sans);
+            font-size: var(--text-sm);
+            color: var(--color-text-primary);
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            appearance: none;
+            transition: border-color var(--transition);
+        }
+
+        .filter-input:focus {
+            outline: none;
+            border-color: var(--color-border-focus);
+        }
+
+        .filter-select-wrap {
+            position: relative;
+        }
+
+        .filter-select-wrap::after {
+            content: '';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid var(--color-text-secondary);
+            pointer-events: none;
+        }
+
+        .filter-bar__actions {
+            display: flex;
+            align-items: flex-end;
+            gap: var(--space-1);
+        }
+
+        /* ── JOB GRID ── */
+        .job-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: var(--space-3);
+        }
+
+        .job-count {
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-2);
+            font-weight: 500;
+        }
+
+        /* ── JOB CARD ── */
+        .job-card {
+            background: var(--color-surface);
+            border: var(--border);
+            border-radius: var(--radius);
+            padding: var(--space-3);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+            transition: border-color var(--transition);
+        }
+
+        .job-card:hover {
+            border-color: var(--color-text-secondary);
+        }
+
+        .job-card__top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: var(--space-1);
+        }
+
+        .job-card__title {
+            font-family: var(--font-serif);
+            font-size: var(--text-lg);
+            font-weight: 500;
+            color: var(--color-text-primary);
+            line-height: var(--leading-tight);
+            margin-bottom: 2px;
+        }
+
+        .job-card__company {
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .job-card__meta {
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+            line-height: var(--leading-normal);
+        }
+
+        .job-card__tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .job-card__tag {
+            font-size: var(--text-xs);
+            font-weight: 500;
+            padding: 3px 8px;
+            background: var(--color-bg);
+            border: var(--border);
+            border-radius: var(--radius-full);
+            color: var(--color-text-secondary);
+        }
+
+        .job-card__salary {
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .job-card__footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: var(--space-1);
+            border-top: var(--border);
+            margin-top: auto;
+        }
+
+        .job-card__posted {
+            font-size: var(--text-xs);
+            color: var(--color-text-secondary);
+        }
+
+        .job-card__actions {
+            display: flex;
+            gap: var(--space-1);
+        }
+
+        .source-badge {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            padding: 2px 7px;
+            border-radius: var(--radius-full);
+            border: 1px solid transparent;
+        }
+
+        .source-badge--LinkedIn {
+            background: #e8f0fe;
+            color: #1a56db;
+            border-color: #c3d5fb;
+        }
+
+        .source-badge--Naukri {
+            background: #fef3e2;
+            color: #92400e;
+            border-color: #fde68a;
+        }
+
+        .source-badge--Indeed {
+            background: #eefbf3;
+            color: #166534;
+            border-color: #bbf7d0;
+        }
+
+        /* ── EMPTY STATE ── */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: var(--space-5) var(--space-4);
+            min-height: 360px;
+            gap: var(--space-2);
+        }
+
+        .empty-state__ring {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--space-1);
+        }
+
+        .empty-state__ring-inner {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 1.5px solid var(--color-border);
+        }
+
+        .empty-state__heading {
+            font-family: var(--font-serif);
+            font-size: var(--text-xl);
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .empty-state__sub {
+            font-size: var(--text-base);
+            color: var(--color-text-secondary);
+            line-height: var(--leading-relaxed);
+            max-width: 380px;
+        }
+
+        /* ── MODAL ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(17, 17, 17, .45);
+            z-index: var(--z-overlay);
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-3);
+        }
+
+        .modal-overlay.is-open {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--color-surface);
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 640px;
+            max-height: 90vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal__header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            padding: var(--space-3);
+            border-bottom: var(--border);
+            gap: var(--space-2);
+        }
+
+        .modal__title {
+            font-family: var(--font-serif);
+            font-size: var(--text-xl);
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .modal__company {
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            margin-top: 4px;
+        }
+
+        .modal__close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--color-text-secondary);
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            line-height: 1;
+            transition: background-color var(--transition), color var(--transition);
+        }
+
+        .modal__close:hover {
+            background: var(--color-bg);
+            color: var(--color-text-primary);
+        }
+
+        .modal__body {
+            padding: var(--space-3);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+        }
+
+        .modal__meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+        }
+
+        .modal__meta-item {
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+        }
+
+        .modal__meta-item strong {
+            color: var(--color-text-primary);
+            font-weight: 600;
+        }
+
+        .modal__section-label {
+            font-size: var(--text-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: var(--tracking-wide);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-1);
+        }
+
+        .modal__desc {
+            font-size: var(--text-base);
+            color: var(--color-text-primary);
+            line-height: var(--leading-relaxed);
+        }
+
+        .modal__skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-1);
+        }
+
+        .modal__footer {
+            padding: var(--space-2) var(--space-3);
+            border-top: var(--border);
+            display: flex;
+            gap: var(--space-2);
+            justify-content: flex-end;
+        }
+
+        /* ── LANDING ── */
+        .landing {
+            min-height: calc(100vh - var(--topbar-height) - 57px);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            max-width: var(--max-layout-width);
+            margin: 0 auto;
+            padding: var(--space-5) var(--space-4);
+        }
+
+        .landing__eyebrow {
+            font-size: var(--text-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: var(--tracking-wide);
+            color: var(--color-accent);
+            margin-bottom: var(--space-2);
+        }
+
+        .landing__headline {
+            font-family: var(--font-serif);
+            font-size: clamp(40px, 6vw, 64px);
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            color: var(--color-text-primary);
+            max-width: 640px;
+            margin-bottom: var(--space-2);
+        }
+
+        .landing__sub {
+            font-size: var(--text-md);
+            color: var(--color-text-secondary);
+            line-height: var(--leading-relaxed);
+            max-width: 480px;
+            margin-bottom: var(--space-4);
+        }
+
+        .landing__divider {
+            width: 48px;
+            height: 2px;
+            background: var(--color-accent);
+            border: none;
+            margin: var(--space-4) 0;
+        }
+
+        .landing__props {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-3);
+            max-width: 720px;
+        }
+
+        .landing__prop-label {
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 4px;
+        }
+
+        .landing__prop-sub {
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+            line-height: var(--leading-relaxed);
+        }
+
+        /* ── SETTINGS ── */
+        .settings-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--space-4);
+            align-items: start;
+        }
+
+        .settings-form {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+        }
+
+        .ds-tag-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 8px var(--space-1);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            background: var(--color-surface);
+            min-height: 44px;
+            align-items: center;
+        }
+
+        .ds-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 10px;
+            background: var(--color-bg);
+            border: var(--border);
+            border-radius: var(--radius-full);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            color: var(--color-text-primary);
+        }
+
+        .ds-tag__remove {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .ds-tag-placeholder {
+            font-size: var(--text-sm);
+            color: var(--color-text-placeholder);
+        }
+
+        .ds-mode-group {
+            display: flex;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .ds-mode-option {
+            flex: 1;
+            padding: 10px var(--space-2);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            text-align: center;
+            cursor: pointer;
+            background: var(--color-surface);
+            color: var(--color-text-secondary);
+            border: none;
+            border-right: var(--border);
+            transition: background-color var(--transition), color var(--transition);
+        }
+
+        .ds-mode-option:last-child {
+            border-right: none;
+        }
+
+        .ds-mode-option:hover {
+            background: var(--color-bg);
+            color: var(--color-text-primary);
+        }
+
+        .ds-mode-option.is-selected {
+            background: var(--color-accent-subtle);
+            color: var(--color-accent);
+            font-weight: 600;
+        }
+
+        .ds-level-group {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-1);
+        }
+
+        .ds-level-option {
+            padding: var(--space-1);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            text-align: center;
+            cursor: pointer;
+            background: var(--color-surface);
+            color: var(--color-text-secondary);
+            border: var(--border);
+            border-radius: var(--radius);
+            transition: background-color var(--transition), color var(--transition), border-color var(--transition);
+        }
+
+        .ds-level-option:hover {
+            border-color: var(--color-text-secondary);
+            color: var(--color-text-primary);
+        }
+
+        .ds-level-option.is-selected {
+            background: var(--color-accent-subtle);
+            color: var(--color-accent);
+            border-color: var(--color-accent);
+        }
+
+        .settings-aside {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+            position: sticky;
+            top: calc(var(--topbar-height) + var(--space-3));
+        }
+
+        /* ── PROOF ── */
+        .proof-wrap {
+            max-width: var(--max-layout-width);
+            margin: 0 auto;
+            padding: var(--space-4);
+        }
+
         /* ── 404 ── */
-        .not-found-page {
+        .notfound {
             min-height: calc(100vh - var(--topbar-height) - 57px);
             display: flex;
             flex-direction: column;
@@ -543,7 +785,7 @@
             padding: var(--space-5) var(--space-4);
         }
 
-        .not-found-page__code {
+        .notfound__code {
             font-family: var(--font-serif);
             font-size: 96px;
             font-weight: 700;
@@ -551,10 +793,9 @@
             line-height: 1;
             letter-spacing: -0.04em;
             margin-bottom: var(--space-2);
-            user-select: none;
         }
 
-        .not-found-page__heading {
+        .notfound__heading {
             font-family: var(--font-serif);
             font-size: var(--text-xl);
             font-weight: 600;
@@ -562,30 +803,27 @@
             margin-bottom: var(--space-1);
         }
 
-        .not-found-page__sub {
+        .notfound__sub {
             font-size: var(--text-base);
             color: var(--color-text-secondary);
-            line-height: var(--leading-relaxed);
             max-width: 360px;
             margin-bottom: var(--space-3);
         }
 
         /* ── RESPONSIVE ── */
-        @media (max-width: 768px) {
-            .settings-layout {
+        @media(max-width:768px) {
+
+            .settings-layout,
+            .landing__props {
                 grid-template-columns: 1fr;
             }
 
-            .settings-info {
+            .settings-aside {
                 position: static;
-            }
-
-            .landing__value-props {
-                grid-template-columns: 1fr 1fr;
             }
         }
 
-        @media (max-width: 640px) {
+        @media(max-width:640px) {
             .app-nav__links {
                 display: none;
             }
@@ -594,32 +832,26 @@
                 display: flex;
             }
 
-            .app-nav__inner {
-                padding: 0 var(--space-3);
+            .filter-bar {
+                flex-direction: column;
+            }
+
+            .filter-group,
+            .filter-group--wide {
+                min-width: unset;
+                width: 100%;
+            }
+
+            .job-grid {
+                grid-template-columns: 1fr;
             }
 
             .landing__headline {
                 font-size: var(--text-2xl);
             }
 
-            .landing {
-                padding: var(--space-4) var(--space-3);
-            }
-
-            .landing__value-props {
-                grid-template-columns: 1fr;
-            }
-
             .ds-level-group {
                 grid-template-columns: repeat(2, 1fr);
-            }
-
-            .page-container {
-                padding: var(--space-4) var(--space-3);
-            }
-
-            .proof-page {
-                padding: var(--space-4) var(--space-3);
             }
         }
     </style>
@@ -627,15 +859,10 @@
 
 <body>
 
-    <!-- ══════════════════════════════════════════
-     NAVIGATION
-══════════════════════════════════════════ -->
+    <!-- NAV -->
     <nav class="app-nav" role="navigation" aria-label="Main navigation">
         <div class="app-nav__inner">
-            <a href="#/" class="app-nav__brand" aria-label="Job Notification Tracker — home">
-                Job Notification Tracker
-            </a>
-
+            <a href="#/" class="app-nav__brand">Job Notification Tracker</a>
             <ul class="app-nav__links" role="list">
                 <li><a href="#/dashboard" class="app-nav__link" data-route="dashboard">Dashboard</a></li>
                 <li><a href="#/saved" class="app-nav__link" data-route="saved">Saved</a></li>
@@ -643,7 +870,6 @@
                 <li><a href="#/settings" class="app-nav__link" data-route="settings">Settings</a></li>
                 <li><a href="#/proof" class="app-nav__link" data-route="proof">Proof</a></li>
             </ul>
-
             <button class="app-nav__hamburger" id="hamburger-btn" aria-expanded="false" aria-controls="mobile-drawer"
                 aria-label="Open navigation menu">
                 <span class="app-nav__hamburger-bar"></span>
@@ -651,8 +877,7 @@
                 <span class="app-nav__hamburger-bar"></span>
             </button>
         </div>
-
-        <div class="app-nav__drawer" id="mobile-drawer" role="list" aria-label="Mobile navigation">
+        <div class="app-nav__drawer" id="mobile-drawer" role="list">
             <a href="#/dashboard" class="app-nav__drawer-link" data-route="dashboard" role="listitem">Dashboard</a>
             <a href="#/saved" class="app-nav__drawer-link" data-route="saved" role="listitem">Saved</a>
             <a href="#/digest" class="app-nav__drawer-link" data-route="digest" role="listitem">Digest</a>
@@ -661,151 +886,150 @@
         </div>
     </nav>
 
-    <!-- ══════════════════════════════════════════
-     PAGE OUTLET
-══════════════════════════════════════════ -->
+    <!-- OUTLET -->
     <main id="app-outlet" role="main" aria-live="polite" aria-atomic="true"></main>
 
-    <!-- ══════════════════════════════════════════
-     PROOF FOOTER
-══════════════════════════════════════════ -->
+    <!-- MODAL -->
+    <div class="modal-overlay" id="job-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal">
+            <div class="modal__header">
+                <div>
+                    <h2 class="modal__title" id="modal-title"></h2>
+                    <p class="modal__company" id="modal-company"></p>
+                </div>
+                <button class="modal__close" id="modal-close" aria-label="Close">✕</button>
+            </div>
+            <div class="modal__body">
+                <div class="modal__meta-row" id="modal-meta"></div>
+                <div>
+                    <p class="modal__section-label">About this role</p>
+                    <p class="modal__desc" id="modal-desc"></p>
+                </div>
+                <div>
+                    <p class="modal__section-label">Skills</p>
+                    <div class="modal__skills" id="modal-skills"></div>
+                </div>
+            </div>
+            <div class="modal__footer">
+                <button class="ds-btn ds-btn--secondary ds-btn--sm" id="modal-save-btn">Save Role</button>
+                <a class="ds-btn ds-btn--primary ds-btn--sm" id="modal-apply-btn" href="#" target="_blank"
+                    rel="noopener">Apply →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROOF FOOTER -->
     <footer class="app-footer" role="contentinfo">
         <div class="app-footer__inner">
             <span class="app-footer__label">Build status</span>
             <div class="ds-checklist">
-                <span class="ds-checklist__item ds-checklist__item--done">
-                    <span class="ds-checklist__box" aria-hidden="true"></span>
-                    UI Built
-                </span>
-                <span class="ds-checklist__item ds-checklist__item--done">
-                    <span class="ds-checklist__box" aria-hidden="true"></span>
-                    Logic Working
-                </span>
-                <span class="ds-checklist__item">
-                    <span class="ds-checklist__box" aria-hidden="true"></span>
-                    Test Passed
-                </span>
-                <span class="ds-checklist__item">
-                    <span class="ds-checklist__box" aria-hidden="true"></span>
-                    Deployed
-                </span>
+                <span class="ds-checklist__item ds-checklist__item--done"><span class="ds-checklist__box"
+                        aria-hidden="true"></span>UI Built</span>
+                <span class="ds-checklist__item ds-checklist__item--done"><span class="ds-checklist__box"
+                        aria-hidden="true"></span>Logic Working</span>
+                <span class="ds-checklist__item"><span class="ds-checklist__box" aria-hidden="true"></span>Test
+                    Passed</span>
+                <span class="ds-checklist__item"><span class="ds-checklist__box"
+                        aria-hidden="true"></span>Deployed</span>
             </div>
         </div>
     </footer>
 
-    <!-- ══════════════════════════════════════════
-     PAGE TEMPLATES (HTML strings)
-══════════════════════════════════════════ -->
+    <!-- STATIC PAGE TEMPLATES -->
     <template id="tpl-home">
-        <section class="landing" aria-labelledby="landing-heading">
+        <section class="landing" aria-labelledby="landing-h">
             <p class="landing__eyebrow">Job Notification Tracker</p>
-            <h1 class="landing__headline" id="landing-heading">Stop Missing The Right Jobs.</h1>
-            <p class="landing__subtext">Precision-matched job discovery delivered daily at 9AM.</p>
-            <div class="landing__cta-row">
+            <h1 class="landing__headline" id="landing-h">Stop Missing The Right Jobs.</h1>
+            <p class="landing__sub">Precision-matched job discovery delivered daily at 9AM.</p>
+            <div style="display:flex;align-items:center;gap:var(--space-2);flex-wrap:wrap;">
                 <a href="#/settings" class="ds-btn ds-btn--primary ds-btn--lg">Start Tracking</a>
-                <span class="landing__meta">No account needed to explore.</span>
+                <span style="font-size:var(--text-sm);color:var(--color-text-secondary);">No account needed to
+                    explore.</span>
             </div>
             <hr class="landing__divider" aria-hidden="true" />
-            <div class="landing__value-props" aria-label="Key features">
-                <div class="landing__prop">
-                    <span class="landing__prop-label">Daily at 9AM</span>
-                    <span class="landing__prop-sub">One focused digest. No intraday noise.</span>
+            <div class="landing__props">
+                <div>
+                    <p class="landing__prop-label">Daily at 9AM</p>
+                    <p class="landing__prop-sub">One focused digest. No intraday noise.</p>
                 </div>
-                <div class="landing__prop">
-                    <span class="landing__prop-label">Precision Filters</span>
-                    <span class="landing__prop-sub">Role, location, mode, level — all configurable.</span>
+                <div>
+                    <p class="landing__prop-label">Precision Filters</p>
+                    <p class="landing__prop-sub">Role, location, mode, level — all configurable.</p>
                 </div>
-                <div class="landing__prop">
-                    <span class="landing__prop-label">Save &amp; Track</span>
-                    <span class="landing__prop-sub">Bookmark roles and follow their status over time.</span>
+                <div>
+                    <p class="landing__prop-label">Save &amp; Track</p>
+                    <p class="landing__prop-sub">Bookmark roles and follow their status over time.</p>
                 </div>
             </div>
         </section>
     </template>
 
-    <template id="tpl-dashboard">
-        <div class="empty-page" aria-labelledby="dashboard-heading">
-            <div class="empty-page__ornament" aria-hidden="true">
-                <div class="empty-page__ornament-inner"></div>
+    <template id="tpl-digest">
+        <div class="empty-state">
+            <div class="empty-state__ring" aria-hidden="true">
+                <div class="empty-state__ring-inner"></div>
             </div>
-            <p class="empty-page__eyebrow">Dashboard</p>
-            <h1 class="empty-page__heading" id="dashboard-heading">No jobs yet.</h1>
-            <p class="empty-page__sub">
-                In the next step, you will load a realistic dataset of matched roles tailored to your preferences.
-            </p>
-            <div class="empty-page__action">
-                <a href="#/settings" class="ds-btn ds-btn--primary">Configure Preferences</a>
-                <span class="ds-body-sm">Set your filters first, then return here.</span>
+            <p class="ds-eyebrow">Daily Digest</p>
+            <h1 class="empty-state__heading">Your 9AM briefing.</h1>
+            <p class="empty-state__sub">Every morning, a curated summary of the highest-match roles will be compiled
+                here — no noise, no duplicates.</p>
+            <div
+                style="margin-top:var(--space-2);display:flex;flex-direction:column;align-items:center;gap:var(--space-1);">
+                <a href="#/settings" class="ds-btn ds-btn--secondary">Set Preferences First</a>
+                <span class="ds-body-sm">Digest logic will be built in an upcoming step.</span>
             </div>
         </div>
     </template>
 
     <template id="tpl-settings">
-        <div class="page-container">
+        <div class="page-wrap">
             <header class="page-header">
                 <p class="page-header__eyebrow">Configuration</p>
                 <h1 class="page-header__heading">Settings</h1>
-                <p class="page-header__sub">
-                    Define what you are looking for. Your preferences shape every match, digest, and alert.
-                </p>
+                <p class="page-header__sub">Define what you are looking for. Your preferences shape every match, digest,
+                    and alert.</p>
             </header>
-
             <div class="settings-layout">
-                <!-- Form -->
-                <div class="settings-form" aria-label="Preference form">
-
-                    <!-- Role keywords -->
+                <div class="settings-form">
                     <div class="ds-card">
-                        <div class="ds-card__header">
-                            <span class="ds-card__title">Role Keywords</span>
-                        </div>
+                        <div class="ds-card__header"><span class="ds-card__title">Role Keywords</span></div>
                         <div class="ds-card__body">
                             <div class="ds-field">
-                                <label class="ds-field__label" for="role-keywords">
-                                    Job titles or keywords <span class="ds-field__required" aria-hidden="true">*</span>
-                                </label>
-                                <div class="ds-tag-group" aria-label="Selected keywords" role="group">
+                                <label class="ds-field__label">Job titles or keywords <span class="ds-field__required"
+                                        aria-hidden="true">*</span></label>
+                                <div class="ds-tag-group">
                                     <span class="ds-tag">Product Manager <button class="ds-tag__remove"
-                                            aria-label="Remove Product Manager">×</button></span>
+                                            aria-label="Remove">×</button></span>
                                     <span class="ds-tag">Senior PM <button class="ds-tag__remove"
-                                            aria-label="Remove Senior PM">×</button></span>
+                                            aria-label="Remove">×</button></span>
                                     <span class="ds-tag-placeholder">Add a keyword…</span>
                                 </div>
-                                <span class="ds-field__hint">Add roles you want to track. Examples: "Product Manager",
-                                    "Growth PM", "Head of Product".</span>
+                                <span class="ds-field__hint">Examples: "SDE Intern", "Python Developer", "Data
+                                    Analyst".</span>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Preferred locations -->
                     <div class="ds-card">
-                        <div class="ds-card__header">
-                            <span class="ds-card__title">Preferred Locations</span>
-                        </div>
+                        <div class="ds-card__header"><span class="ds-card__title">Preferred Locations</span></div>
                         <div class="ds-card__body">
                             <div class="ds-field">
-                                <label class="ds-field__label" for="locations">Cities or regions</label>
-                                <div class="ds-tag-group" aria-label="Selected locations" role="group">
+                                <label class="ds-field__label">Cities or regions</label>
+                                <div class="ds-tag-group">
                                     <span class="ds-tag">Bengaluru <button class="ds-tag__remove"
-                                            aria-label="Remove Bengaluru">×</button></span>
+                                            aria-label="Remove">×</button></span>
                                     <span class="ds-tag">Remote <button class="ds-tag__remove"
-                                            aria-label="Remove Remote">×</button></span>
+                                            aria-label="Remove">×</button></span>
                                     <span class="ds-tag-placeholder">Add a location…</span>
                                 </div>
-                                <span class="ds-field__hint">Leave empty to include all locations.</span>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Work mode -->
                     <div class="ds-card">
-                        <div class="ds-card__header">
-                            <span class="ds-card__title">Work Mode</span>
-                        </div>
+                        <div class="ds-card__header"><span class="ds-card__title">Work Mode</span></div>
                         <div class="ds-card__body">
                             <div class="ds-field">
-                                <label class="ds-field__label" id="mode-label">Preferred arrangement</label>
-                                <div class="ds-mode-group" role="group" aria-labelledby="mode-label">
+                                <label class="ds-field__label" id="mode-lbl">Preferred arrangement</label>
+                                <div class="ds-mode-group" role="group" aria-labelledby="mode-lbl">
                                     <button class="ds-mode-option is-selected" aria-pressed="true">Remote</button>
                                     <button class="ds-mode-option" aria-pressed="false">Hybrid</button>
                                     <button class="ds-mode-option" aria-pressed="false">Onsite</button>
@@ -813,60 +1037,39 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Experience level -->
                     <div class="ds-card">
-                        <div class="ds-card__header">
-                            <span class="ds-card__title">Experience Level</span>
-                        </div>
+                        <div class="ds-card__header"><span class="ds-card__title">Experience Level</span></div>
                         <div class="ds-card__body">
                             <div class="ds-field">
-                                <label class="ds-field__label" id="level-label">Your seniority</label>
-                                <div class="ds-level-group" role="group" aria-labelledby="level-label">
-                                    <button class="ds-level-option" aria-pressed="false">Internship</button>
-                                    <button class="ds-level-option" aria-pressed="false">Entry</button>
-                                    <button class="ds-level-option is-selected" aria-pressed="true">Mid-Senior</button>
-                                    <button class="ds-level-option" aria-pressed="false">Director+</button>
+                                <label class="ds-field__label" id="lvl-lbl">Your seniority</label>
+                                <div class="ds-level-group" role="group" aria-labelledby="lvl-lbl">
+                                    <button class="ds-level-option" aria-pressed="false">Fresher</button>
+                                    <button class="ds-level-option" aria-pressed="false">0–1 yr</button>
+                                    <button class="ds-level-option is-selected" aria-pressed="true">1–3 yrs</button>
+                                    <button class="ds-level-option" aria-pressed="false">3–5 yrs</button>
                                 </div>
-                                <span class="ds-field__hint">We use this to filter out irrelevant matches.</span>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Save row (UI only) -->
-                    <div class="ds-flex ds-items-center ds-justify-between" style="padding-top: var(--space-1);">
+                    <div
+                        style="display:flex;align-items:center;justify-content:space-between;padding-top:var(--space-1);">
                         <span class="ds-body-sm">Preferences are stored locally in your browser.</span>
-                        <button class="ds-btn ds-btn--primary" disabled title="Logic will be added in the next step">
-                            Save Preferences
-                        </button>
+                        <button class="ds-btn ds-btn--primary" disabled title="Logic wired in the next step">Save
+                            Preferences</button>
                     </div>
                 </div>
-
-                <!-- Sidebar info -->
-                <aside class="settings-info" aria-label="Settings guidance">
+                <aside class="settings-aside">
                     <div class="ds-step-panel">
                         <p class="ds-step-panel__number">Step 1 of 4</p>
                         <p class="ds-step-panel__title">Configure your tracker</p>
-                        <p class="ds-step-panel__body">
-                            These preferences are used to filter and score job listings before they reach your dashboard
-                            or digest.
-                        </p>
+                        <p class="ds-step-panel__body">These preferences will filter and score job listings before they
+                            reach your dashboard or digest.</p>
                     </div>
-
                     <div class="ds-alert ds-alert--info">
                         <span class="ds-alert__icon" aria-hidden="true">i</span>
                         <div class="ds-alert__content">
-                            <p class="ds-alert__title">Preferences not saved yet</p>
-                            <p class="ds-alert__message">Saving logic will be wired in the next build step. This is a UI
-                                skeleton.</p>
-                        </div>
-                    </div>
-
-                    <div class="ds-card ds-card--sm">
-                        <div class="ds-card__body">
-                            <p class="ds-eyebrow ds-mb-1">What happens next</p>
-                            <p class="ds-body-sm">Your preferences will shape daily digests, dashboard rankings, and
-                                saved job alerts.</p>
+                            <p class="ds-alert__title">UI skeleton only</p>
+                            <p class="ds-alert__message">Saving logic will be wired in the next build step.</p>
                         </div>
                     </div>
                 </aside>
@@ -874,230 +1077,334 @@
         </div>
     </template>
 
-    <template id="tpl-saved">
-        <div class="empty-page" aria-labelledby="saved-heading">
-            <div class="empty-page__ornament" aria-hidden="true">
-                <div class="empty-page__ornament-inner"></div>
-            </div>
-            <p class="empty-page__eyebrow">Saved Roles</p>
-            <h1 class="empty-page__heading" id="saved-heading">Your shortlist lives here.</h1>
-            <p class="empty-page__sub">
-                Roles you bookmark from your dashboard or digest will appear here for easy review and comparison.
-            </p>
-            <div class="empty-page__action">
-                <a href="#/dashboard" class="ds-btn ds-btn--secondary">Go to Dashboard</a>
-            </div>
-        </div>
-    </template>
-
-    <template id="tpl-digest">
-        <div class="empty-page" aria-labelledby="digest-heading">
-            <div class="empty-page__ornament" aria-hidden="true">
-                <div class="empty-page__ornament-inner"></div>
-            </div>
-            <p class="empty-page__eyebrow">Daily Digest</p>
-            <h1 class="empty-page__heading" id="digest-heading">Your 9AM briefing.</h1>
-            <p class="empty-page__sub">
-                Every morning, a curated summary of the highest-match roles will be compiled here — no noise, no
-                duplicates.
-            </p>
-            <div class="empty-page__action">
-                <a href="#/settings" class="ds-btn ds-btn--secondary">Set Preferences First</a>
-                <span class="ds-body-sm">Digest logic will be built in an upcoming step.</span>
-            </div>
-        </div>
-    </template>
-
     <template id="tpl-proof">
-        <div class="proof-page">
-            <header class="proof-page__header">
+        <div class="proof-wrap">
+            <header class="page-header">
                 <p class="page-header__eyebrow">Build Log</p>
-                <h1 class="page-header__heading"
-                    style="font-family: var(--font-serif); font-size: var(--text-2xl); font-weight: 600; letter-spacing: var(--tracking-tight); color: var(--color-text-primary); margin-bottom: var(--space-1);">
-                    Proof</h1>
-                <p class="page-header__sub">
-                    Artifacts, screenshots, and evidence of each build step will be collected here.
-                </p>
+                <h1 class="page-header__heading">Proof</h1>
+                <p class="page-header__sub">Artifacts and evidence of each build step collected here.</p>
             </header>
-
             <div class="ds-card">
                 <div class="ds-card__body">
-                    <div class="ds-checklist"
-                        style="flex-direction: column; align-items: flex-start; gap: var(--space-2);">
-                        <span class="ds-checklist__item ds-checklist__item--done">
-                            <span class="ds-checklist__box" aria-hidden="true"></span>
-                            <span><strong>Design System</strong> — CSS tokens, typography, spacing, components</span>
-                        </span>
-                        <span class="ds-checklist__item ds-checklist__item--done">
-                            <span class="ds-checklist__box" aria-hidden="true"></span>
-                            <span><strong>Route Skeleton</strong> — Navigation shell, all routes, 404 page</span>
-                        </span>
-                        <span class="ds-checklist__item ds-checklist__item--done">
-                            <span class="ds-checklist__box" aria-hidden="true"></span>
-                            <span><strong>App Skeleton</strong> — Landing page, Settings UI, empty states</span>
-                        </span>
-                        <span class="ds-checklist__item">
-                            <span class="ds-checklist__box" aria-hidden="true"></span>
-                            <span><strong>Data Layer</strong> — Realistic job dataset loaded into dashboard</span>
-                        </span>
-                        <span class="ds-checklist__item">
-                            <span class="ds-checklist__box" aria-hidden="true"></span>
-                            <span><strong>Digest Logic</strong> — Daily 9AM summary generation</span>
-                        </span>
-                        <span class="ds-checklist__item">
-                            <span class="ds-checklist__box" aria-hidden="true"></span>
-                            <span><strong>Save &amp; Persist</strong> — Bookmarks stored in localStorage</span>
-                        </span>
+                    <div class="ds-checklist" style="flex-direction:column;align-items:flex-start;gap:var(--space-2);">
+                        <span class="ds-checklist__item ds-checklist__item--done"><span class="ds-checklist__box"
+                                aria-hidden="true"></span><span><strong>Design System</strong> — CSS tokens, typography,
+                                spacing, components</span></span>
+                        <span class="ds-checklist__item ds-checklist__item--done"><span class="ds-checklist__box"
+                                aria-hidden="true"></span><span><strong>Route Skeleton</strong> — Navigation shell, all
+                                routes, 404 page</span></span>
+                        <span class="ds-checklist__item ds-checklist__item--done"><span class="ds-checklist__box"
+                                aria-hidden="true"></span><span><strong>App Skeleton</strong> — Landing page, Settings
+                                UI, empty states</span></span>
+                        <span class="ds-checklist__item ds-checklist__item--done"><span class="ds-checklist__box"
+                                aria-hidden="true"></span><span><strong>Data Layer</strong> — 60 realistic Indian tech
+                                jobs rendered on Dashboard</span></span>
+                        <span class="ds-checklist__item"><span class="ds-checklist__box"
+                                aria-hidden="true"></span><span><strong>Digest Logic</strong> — Daily 9AM summary
+                                generation</span></span>
+                        <span class="ds-checklist__item"><span class="ds-checklist__box"
+                                aria-hidden="true"></span><span><strong>Deployed</strong> — Live on hosting
+                                platform</span></span>
                     </div>
                 </div>
             </div>
         </div>
     </template>
 
-    <template id="tpl-404">
-        <div class="not-found-page" role="region" aria-label="Page not found">
-            <p class="not-found-page__code" aria-hidden="true">404</p>
-            <h1 class="not-found-page__heading">Page Not Found</h1>
-            <p class="not-found-page__sub">The page you are looking for does not exist.</p>
-            <a href="#/" class="ds-btn ds-btn--primary">Go to Home</a>
-        </div>
-    </template>
-
-    <!-- ══════════════════════════════════════════
-     ROUTER & APP LOGIC
-══════════════════════════════════════════ -->
+    <!-- SCRIPTS -->
+    <script src="jobs.js"></script>
     <script>
         'use strict';
 
-        /* ─────────────────────────────────────────
-           ROUTE MAP: segment → template ID + title
-        ───────────────────────────────────────── */
+        /* ── SAVED JOBS (localStorage) ── */
+        const SAVED_KEY = 'jnt_saved_v1';
+        function getSaved() { try { return new Set(JSON.parse(localStorage.getItem(SAVED_KEY) || '[]')); } catch (_) { return new Set(); } }
+        function setSaved(s) { localStorage.setItem(SAVED_KEY, JSON.stringify([...s])); }
+        function toggleSave(id) { const s = getSaved(); s.has(id) ? s.delete(id) : s.add(id); setSaved(s); return s.has(id); }
+        function isSaved(id) { return getSaved().has(id); }
+
+        /* ── FILTER STATE ── */
+        const F = { keyword: '', location: '', mode: '', experience: '', source: '', sort: 'latest' };
+
+        /* ── HELPERS ── */
+        const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        function postedLabel(d) { if (d === 0) return 'Today'; if (d === 1) return '1 day ago'; return `${d} days ago`; }
+
+        /* ── JOB CARD HTML ── */
+        function jobCardHTML(j) {
+            const saved = isSaved(j.id);
+            return `
+  <article class="job-card" data-id="${j.id}">
+    <div class="job-card__top">
+      <div>
+        <h3 class="job-card__title">${esc(j.title)}</h3>
+        <p class="job-card__company">${esc(j.company)}</p>
+      </div>
+      <span class="source-badge source-badge--${esc(j.source)}">${esc(j.source)}</span>
+    </div>
+    <p class="job-card__meta">${esc(j.location)} · ${esc(j.mode)} · ${esc(j.experience)}</p>
+    <p class="job-card__salary">${esc(j.salaryRange)}</p>
+    <div class="job-card__tags">${j.skills.slice(0, 3).map(sk => `<span class="job-card__tag">${esc(sk)}</span>`).join('')}</div>
+    <div class="job-card__footer">
+      <span class="job-card__posted">${postedLabel(j.postedDaysAgo)}</span>
+      <div class="job-card__actions">
+        <button class="ds-btn ds-btn--ghost ds-btn--sm" onclick="openModal(${j.id})">View</button>
+        <button class="ds-btn ds-btn--secondary ds-btn--sm save-btn" data-id="${j.id}" onclick="handleSave(${j.id},this)">${saved ? 'Saved ✓' : 'Save'}</button>
+        <a class="ds-btn ds-btn--primary ds-btn--sm" href="${esc(j.applyUrl)}" target="_blank" rel="noopener">Apply</a>
+      </div>
+    </div>
+  </article>`;
+        }
+
+        /* ── FILTER JOBS ── */
+        function filterJobs(jobs) {
+            let result = [...jobs];
+            const kw = F.keyword.toLowerCase().trim();
+            if (kw) result = result.filter(j => j.title.toLowerCase().includes(kw) || j.company.toLowerCase().includes(kw) || j.skills.some(s => s.toLowerCase().includes(kw)));
+            if (F.location) result = result.filter(j => j.location === F.location || (F.location === 'Remote' && j.mode === 'Remote'));
+            if (F.mode) result = result.filter(j => j.mode === F.mode);
+            if (F.experience) result = result.filter(j => j.experience === F.experience);
+            if (F.source) result = result.filter(j => j.source === F.source);
+            if (F.sort === 'latest') result.sort((a, b) => a.postedDaysAgo - b.postedDaysAgo);
+            else if (F.sort === 'oldest') result.sort((a, b) => b.postedDaysAgo - a.postedDaysAgo);
+            return result;
+        }
+
+        /* ── RENDER DASHBOARD ── */
+        function renderDashboard() {
+            const jobs = window.JOBS || [];
+            const locs = [...new Set(jobs.map(j => j.location))].sort();
+            const outlet = document.getElementById('app-outlet');
+            outlet.innerHTML = `
+  <div class="page-wrap">
+    <header class="page-header">
+      <p class="page-header__eyebrow">Live Listings</p>
+      <h1 class="page-header__heading">Dashboard</h1>
+      <p class="page-header__sub">Browse ${jobs.length} matched roles curated for Indian tech professionals.</p>
+    </header>
+    <div class="filter-bar">
+      <div class="filter-group filter-group--wide">
+        <label class="filter-label" for="f-keyword">Search</label>
+        <input class="filter-input" id="f-keyword" type="search" placeholder="Title, company or skill…" value="${esc(F.keyword)}" />
+      </div>
+      <div class="filter-group">
+        <label class="filter-label" for="f-location">Location</label>
+        <div class="filter-select-wrap">
+          <select class="filter-input" id="f-location">
+            <option value="">All locations</option>
+            ${locs.map(l => `<option value="${esc(l)}"${F.location === l ? ' selected' : ''}>${esc(l)}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label class="filter-label" for="f-mode">Mode</label>
+        <div class="filter-select-wrap">
+          <select class="filter-input" id="f-mode">
+            <option value="">All modes</option>
+            ${['Remote', 'Hybrid', 'Onsite'].map(m => `<option value="${m}"${F.mode === m ? ' selected' : ''}>${m}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label class="filter-label" for="f-exp">Experience</label>
+        <div class="filter-select-wrap">
+          <select class="filter-input" id="f-exp">
+            <option value="">All levels</option>
+            ${['Fresher', '0-1', '1-3', '3-5'].map(e => `<option value="${e}"${F.experience === e ? ' selected' : ''}>${e === 'Fresher' ? 'Fresher' : e + ' yrs'}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label class="filter-label" for="f-source">Source</label>
+        <div class="filter-select-wrap">
+          <select class="filter-input" id="f-source">
+            <option value="">All sources</option>
+            ${['LinkedIn', 'Naukri', 'Indeed'].map(s => `<option value="${s}"${F.source === s ? ' selected' : ''}>${s}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label class="filter-label" for="f-sort">Sort</label>
+        <div class="filter-select-wrap">
+          <select class="filter-input" id="f-sort">
+            <option value="latest"${F.sort === 'latest' ? ' selected' : ''}>Latest first</option>
+            <option value="oldest"${F.sort === 'oldest' ? ' selected' : ''}>Oldest first</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div id="job-results"></div>
+  </div>`;
+            bindFilters();
+            renderJobResults();
+        }
+
+        function renderJobResults() {
+            const filtered = filterJobs(window.JOBS || []);
+            const container = document.getElementById('job-results');
+            if (!container) return;
+            if (!filtered.length) {
+                container.innerHTML = `<div class="empty-state"><div class="empty-state__ring" aria-hidden="true"><div class="empty-state__ring-inner"></div></div><h2 class="empty-state__heading">No jobs match your search.</h2><p class="empty-state__sub">Try adjusting your filters or clearing the keyword search.</p><button class="ds-btn ds-btn--secondary" style="margin-top:var(--space-2);" onclick="clearFilters()">Clear Filters</button></div>`;
+                return;
+            }
+            container.innerHTML = `<p class="job-count">${filtered.length} role${filtered.length !== 1 ? 's' : ''} found</p><div class="job-grid">${filtered.map(jobCardHTML).join('')}</div>`;
+        }
+
+        function bindFilters() {
+            const bind = (id, key) => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.addEventListener('input', () => { F[key] = el.value; renderJobResults(); });
+            };
+            bind('f-keyword', 'keyword'); bind('f-location', 'location');
+            bind('f-mode', 'mode'); bind('f-exp', 'experience');
+            bind('f-source', 'source'); bind('f-sort', 'sort');
+        }
+
+        function clearFilters() {
+            Object.keys(F).forEach(k => F[k] = k === 'sort' ? 'latest' : '');
+            renderDashboard();
+        }
+
+        /* ── RENDER SAVED ── */
+        function renderSaved() {
+            const saved = getSaved();
+            const jobs = (window.JOBS || []).filter(j => saved.has(j.id));
+            const outlet = document.getElementById('app-outlet');
+            let body;
+            if (!jobs.length) {
+                body = `<div class="empty-state">
+      <div class="empty-state__ring" aria-hidden="true"><div class="empty-state__ring-inner"></div></div>
+      <p class="ds-eyebrow">Saved Roles</p>
+      <h1 class="empty-state__heading">Your shortlist lives here.</h1>
+      <p class="empty-state__sub">Roles you bookmark from the dashboard will appear here for easy review and comparison.</p>
+      <a href="#/dashboard" class="ds-btn ds-btn--secondary" style="margin-top:var(--space-2);">Go to Dashboard</a>
+    </div>`;
+            } else {
+                body = `<div class="page-wrap">
+      <header class="page-header">
+        <p class="page-header__eyebrow">Saved Roles</p>
+        <h1 class="page-header__heading">Your Shortlist</h1>
+        <p class="page-header__sub">${jobs.length} role${jobs.length !== 1 ? 's' : ''} saved.</p>
+      </header>
+      <div class="job-grid">${jobs.map(jobCardHTML).join('')}</div>
+    </div>`;
+            }
+            outlet.innerHTML = body;
+        }
+
+        /* ── MODAL ── */
+        function openModal(id) {
+            const j = (window.JOBS || []).find(x => x.id === id); if (!j) return;
+            document.getElementById('modal-title').textContent = j.title;
+            document.getElementById('modal-company').textContent = j.company;
+            document.getElementById('modal-meta').innerHTML = [
+                `<span class="modal__meta-item"><strong>${j.location}</strong></span>`,
+                `<span class="modal__meta-item">· ${j.mode}</span>`,
+                `<span class="modal__meta-item">· ${j.experience === 'Fresher' ? 'Fresher' : j.experience + ' yrs'}</span>`,
+                `<span class="modal__meta-item">· <strong>${j.salaryRange}</strong></span>`,
+                `<span class="modal__meta-item">· ${postedLabel(j.postedDaysAgo)}</span>`,
+                `<span class="modal__meta-item" style="margin-left:auto;"><span class="source-badge source-badge--${esc(j.source)}">${esc(j.source)}</span></span>`
+            ].join('');
+            document.getElementById('modal-desc').textContent = j.description;
+            document.getElementById('modal-skills').innerHTML = j.skills.map(s => `<span class="job-card__tag">${esc(s)}</span>`).join('');
+            const applyBtn = document.getElementById('modal-apply-btn');
+            applyBtn.href = j.applyUrl;
+            const saveBtn = document.getElementById('modal-save-btn');
+            saveBtn.textContent = isSaved(id) ? 'Saved ✓' : 'Save Role';
+            saveBtn.onclick = () => { toggleSave(id); saveBtn.textContent = isSaved(id) ? 'Saved ✓' : 'Save Role'; syncSaveBtns(id); };
+            document.getElementById('job-modal').classList.add('is-open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('job-modal').classList.remove('is-open');
+            document.body.style.overflow = '';
+        }
+
+        function handleSave(id, btn) {
+            toggleSave(id);
+            btn.textContent = isSaved(id) ? 'Saved ✓' : 'Save';
+            syncSaveBtns(id);
+        }
+
+        function syncSaveBtns(id) {
+            document.querySelectorAll(`.save-btn[data-id="${id}"]`).forEach(b => {
+                b.textContent = isSaved(id) ? 'Saved ✓' : 'Save';
+            });
+        }
+
+        document.getElementById('modal-close').addEventListener('click', closeModal);
+        document.getElementById('job-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+        /* ── ROUTER ── */
         const ROUTES = {
             '': { tpl: 'tpl-home', title: 'Home' },
-            'dashboard': { tpl: 'tpl-dashboard', title: 'Dashboard' },
-            'settings': { tpl: 'tpl-settings', title: 'Settings' },
-            'saved': { tpl: 'tpl-saved', title: 'Saved' },
             'digest': { tpl: 'tpl-digest', title: 'Digest' },
+            'settings': { tpl: 'tpl-settings', title: 'Settings' },
             'proof': { tpl: 'tpl-proof', title: 'Proof' },
         };
 
-        const outlet = document.getElementById('app-outlet');
-
-        /* ─────────────────────────────────────────
-           ROUTER
-        ───────────────────────────────────────── */
-        function getSegment() {
-            const hash = window.location.hash;
-            return hash.replace(/^#\/?/, '').split('/')[0].toLowerCase().trim();
-        }
+        function getSegment() { return (window.location.hash || '').replace(/^#\/?/, '').split('/')[0].toLowerCase().trim(); }
 
         function navigate() {
-            const segment = getSegment();
-            const route = ROUTES[segment];
-            const tplId = route ? route.tpl : 'tpl-404';
-            const tpl = document.getElementById(tplId);
-
-            outlet.innerHTML = '';
-            if (tpl) {
-                outlet.appendChild(tpl.content.cloneNode(true));
+            const seg = getSegment();
+            const outlet = document.getElementById('app-outlet');
+            if (seg === 'dashboard') { renderDashboard(); }
+            else if (seg === 'saved') { renderSaved(); }
+            else {
+                const route = ROUTES[seg];
+                if (route) {
+                    const tpl = document.getElementById(route.tpl);
+                    outlet.innerHTML = ''; if (tpl) outlet.appendChild(tpl.content.cloneNode(true));
+                    document.title = `${route.title} — Job Notification Tracker`;
+                    bindSettingsUI();
+                } else {
+                    outlet.innerHTML = `<div class="notfound"><p class="notfound__code" aria-hidden="true">404</p><h1 class="notfound__heading">Page Not Found</h1><p class="notfound__sub">The page you are looking for does not exist.</p><a href="#/" class="ds-btn ds-btn--primary">Go to Home</a></div>`;
+                    document.title = 'Not Found — Job Notification Tracker';
+                }
             }
-
-            document.title = route
-                ? `${route.title} — Job Notification Tracker`
-                : 'Not Found — Job Notification Tracker';
-
-            syncActiveLinks(segment);
+            syncNav(seg);
             closeMobileDrawer();
             window.scrollTo({ top: 0, behavior: 'instant' });
-
-            // Bind interactive elements after render
-            bindModeButtons();
-            bindLevelButtons();
         }
 
-        /* ─────────────────────────────────────────
-           ACTIVE LINK SYNC
-        ───────────────────────────────────────── */
-        function syncActiveLinks(segment) {
-            document.querySelectorAll('[data-route]').forEach(link => {
-                const matches = link.dataset.route === segment;
-                link.classList.toggle('is-active', matches);
-                link.setAttribute('aria-current', matches ? 'page' : 'false');
+        function syncNav(seg) {
+            document.querySelectorAll('[data-route]').forEach(l => {
+                const match = l.dataset.route === seg;
+                l.classList.toggle('is-active', match);
+                l.setAttribute('aria-current', match ? 'page' : 'false');
             });
         }
 
-        /* ─────────────────────────────────────────
-           SETTINGS — Mode / Level toggles (UI only)
-        ───────────────────────────────────────── */
-        function bindModeButtons() {
+        function bindSettingsUI() {
             document.querySelectorAll('.ds-mode-group .ds-mode-option').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    const group = btn.parentElement;
-                    group.querySelectorAll('.ds-mode-option').forEach(b => {
-                        b.classList.remove('is-selected');
-                        b.setAttribute('aria-pressed', 'false');
-                    });
-                    btn.classList.add('is-selected');
-                    btn.setAttribute('aria-pressed', 'true');
+                    btn.parentElement.querySelectorAll('.ds-mode-option').forEach(b => { b.classList.remove('is-selected'); b.setAttribute('aria-pressed', 'false'); });
+                    btn.classList.add('is-selected'); btn.setAttribute('aria-pressed', 'true');
                 });
             });
-        }
-
-        function bindLevelButtons() {
             document.querySelectorAll('.ds-level-group .ds-level-option').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    const group = btn.parentElement;
-                    group.querySelectorAll('.ds-level-option').forEach(b => {
-                        b.classList.remove('is-selected');
-                        b.setAttribute('aria-pressed', 'false');
-                    });
-                    btn.classList.add('is-selected');
-                    btn.setAttribute('aria-pressed', 'true');
+                    btn.parentElement.querySelectorAll('.ds-level-option').forEach(b => { b.classList.remove('is-selected'); b.setAttribute('aria-pressed', 'false'); });
+                    btn.classList.add('is-selected'); btn.setAttribute('aria-pressed', 'true');
                 });
             });
         }
 
-        /* ─────────────────────────────────────────
-           MOBILE HAMBURGER
-        ───────────────────────────────────────── */
+        /* ── HAMBURGER ── */
         const hamburger = document.getElementById('hamburger-btn');
         const drawer = document.getElementById('mobile-drawer');
+        function closeMobileDrawer() { drawer.classList.remove('is-open'); hamburger.setAttribute('aria-expanded', 'false'); }
+        hamburger.addEventListener('click', () => { const open = drawer.classList.contains('is-open'); open ? closeMobileDrawer() : (drawer.classList.add('is-open'), hamburger.setAttribute('aria-expanded', 'true')); });
+        document.addEventListener('click', e => { if (!e.target.closest('.app-nav')) closeMobileDrawer(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMobileDrawer(); });
 
-        function closeMobileDrawer() {
-            drawer.classList.remove('is-open');
-            hamburger.setAttribute('aria-expanded', 'false');
-            hamburger.setAttribute('aria-label', 'Open navigation menu');
-        }
-        function openMobileDrawer() {
-            drawer.classList.add('is-open');
-            hamburger.setAttribute('aria-expanded', 'true');
-            hamburger.setAttribute('aria-label', 'Close navigation menu');
-        }
-
-        hamburger.addEventListener('click', () => {
-            drawer.classList.contains('is-open') ? closeMobileDrawer() : openMobileDrawer();
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.app-nav')) closeMobileDrawer();
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeMobileDrawer();
-        });
-
-        /* ─────────────────────────────────────────
-           BOOTSTRAP
-        ───────────────────────────────────────── */
+        /* ── BOOT ── */
         window.addEventListener('hashchange', navigate);
-
-        if (!window.location.hash || window.location.hash === '#') {
-            window.location.replace('#/');
-        } else {
-            navigate();
-        }
+        if (!window.location.hash || window.location.hash === '#') { window.location.replace('#/'); } else { navigate(); }
     </script>
-
 </body>
 
 </html>
