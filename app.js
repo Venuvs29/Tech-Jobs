@@ -494,16 +494,124 @@ function generateAndRefresh() {
   renderDigest();
 }
 
+/* ── TEST CHECKLIST ── */
+const TEST_STATUS_KEY = 'jobTrackerTestStatus';
+const TEST_ITEMS = [
+  { id: 0, label: 'Preferences persist after refresh', tip: 'Go to Settings, save preferences, then refresh. Confirm values are still populated.' },
+  { id: 1, label: 'Match score calculates correctly', tip: 'Set keywords matching a job title. Confirm that job scores ≥40 on the dashboard.' },
+  { id: 2, label: '"Show only matches" toggle works', tip: 'Enable the toggle on Dashboard. Confirm only jobs meeting your min score are shown.' },
+  { id: 3, label: 'Save job persists after refresh', tip: 'Save a job, refresh, then visit /saved. Confirm it still appears.' },
+  { id: 4, label: 'Apply opens in new tab', tip: 'Click Apply on any card. Confirm a new browser tab opens with the job URL.' },
+  { id: 5, label: 'Status update persists after refresh', tip: 'Change a job to Applied, refresh, confirm the blue badge still shows.' },
+  { id: 6, label: 'Status filter works correctly', tip: 'Set Status filter to Applied. Confirm only Applied jobs are shown.' },
+  { id: 7, label: 'Digest generates top 10 by score', tip: 'Generate digest on /digest. Confirm 10 jobs ordered by match score descending.' },
+  { id: 8, label: 'Digest persists for the day', tip: 'Generate digest, refresh, revisit /digest. Confirm it shows Loaded from cache.' },
+  { id: 9, label: 'No console errors on main pages', tip: 'Open DevTools Console, visit Dashboard, Saved, Digest, Settings. Confirm no red errors.' },
+];
+const TEST_TOTAL = TEST_ITEMS.length;
+function getTestStatus() { try { return JSON.parse(localStorage.getItem(TEST_STATUS_KEY)) || {}; } catch (_) { return {}; } }
+function setTestStatus(map) { localStorage.setItem(TEST_STATUS_KEY, JSON.stringify(map)); }
+function countPassed() { const m = getTestStatus(); return TEST_ITEMS.filter(t => !!m[t.id]).length; }
+function resetTestStatus() { localStorage.removeItem(TEST_STATUS_KEY); renderTestChecklist(); }
+
+function updateTestSummary() {
+  const passed = countPassed();
+  const bar = document.getElementById('test-summary-bar');
+  const warn = document.getElementById('test-warn');
+  if (!bar) return;
+  bar.textContent = `Tests Passed: ${passed} / ${TEST_TOTAL}`;
+  bar.className = `tc-summary-bar ${passed === TEST_TOTAL ? 'tc-summary-bar--pass' : 'tc-summary-bar--warn'}`;
+  if (warn) warn.style.display = passed === TEST_TOTAL ? 'none' : '';
+}
+
+function handleTestCheck(cb) {
+  const id = Number(cb.dataset.testId);
+  const m = getTestStatus();
+  if (cb.checked) m[id] = true; else delete m[id];
+  setTestStatus(m);
+  updateTestSummary();
+}
+
+function renderTestChecklist() {
+  const outlet = document.getElementById('app-outlet');
+  const passed = countPassed();
+  const allDone = passed === TEST_TOTAL;
+  const statuses = getTestStatus();
+  const rows = TEST_ITEMS.map(t => {
+    const checked = !!statuses[t.id];
+    return `<label class="tc-item${checked ? ' tc-item--done' : ''}" for="tc-${t.id}">
+      <input type="checkbox" id="tc-${t.id}" data-test-id="${t.id}" ${checked ? 'checked' : ''} onchange="handleTestCheck(this)" />
+      <span class="tc-item__box" aria-hidden="true"></span>
+      <span class="tc-item__label">${esc(t.label)}</span>
+      <span class="tc-item__tip" title="${esc(t.tip)}">How to test</span>
+    </label>`;
+  }).join('');
+  outlet.innerHTML = `<div class="page-wrap">
+    <header class="page-header">
+      <p class="page-header__eyebrow">QA · Step 7 of 8</p>
+      <h1 class="page-header__heading">Test Checklist</h1>
+      <p class="page-header__sub">Verify every feature before shipping. Check each item after manual confirmation.</p>
+    </header>
+    <div id="test-summary-bar" class="tc-summary-bar">Tests Passed: ${passed} / ${TEST_TOTAL}</div>
+    <p id="test-warn" class="tc-warn" style="display:${allDone ? 'none' : ''};">Resolve all issues before shipping.</p>
+    <div class="tc-list">${rows}</div>
+    <div class="tc-actions">
+      <a href="#/jt/08-ship" class="ds-btn ds-btn--primary">Proceed to Ship →</a>
+      <button class="ds-btn ds-btn--ghost ds-btn--sm" onclick="resetTestStatus()">Reset Test Status</button>
+    </div>
+  </div>`;
+  updateTestSummary();
+}
+
+function renderShipPage() {
+  const outlet = document.getElementById('app-outlet');
+  const passed = countPassed();
+  const allDone = passed === TEST_TOTAL;
+  if (!allDone) {
+    outlet.innerHTML = `<div class="notfound">
+      <p class="notfound__code" aria-hidden="true" style="font-size:64px;">🔒</p>
+      <h1 class="notfound__heading">Ship Lock Active</h1>
+      <p class="notfound__sub">Complete all tests before shipping.<br><strong>${passed} / ${TEST_TOTAL}</strong> tests passed.</p>
+      <a href="#/jt/07-test" class="ds-btn ds-btn--primary" style="margin-top:var(--space-3);">Return to Test Checklist</a>
+    </div>`;
+    return;
+  }
+  outlet.innerHTML = `<div class="page-wrap">
+    <header class="page-header">
+      <p class="page-header__eyebrow">QA · Step 8 of 8</p>
+      <h1 class="page-header__heading">Ready to Ship ✔️</h1>
+      <p class="page-header__sub">All ${TEST_TOTAL} tests passed. The application is verified and ready for deployment.</p>
+    </header>
+    <div class="ds-card">
+      <div class="ds-card__body">
+        <div class="tc-ship-badge">✓ All systems go</div>
+        <p style="font-size:var(--text-base);color:var(--color-text-secondary);margin-top:var(--space-2);line-height:var(--leading-relaxed);">You have manually verified all 10 checklist items. The build is production-ready.</p>
+        <div style="margin-top:var(--space-3);display:flex;gap:var(--space-2);flex-wrap:wrap;">
+          <a href="#/proof" class="ds-btn ds-btn--primary">View Proof Page</a>
+          <a href="#/jt/07-test" class="ds-btn ds-btn--secondary">Revisit Tests</a>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
 /* ── ROUTER ── */
 const ROUTES = { '': { tpl: 'tpl-home', title: 'Home' }, 'settings': { tpl: 'tpl-settings', title: 'Settings' }, 'proof': { tpl: 'tpl-proof', title: 'Proof' } };
 
-function getSegment() { return (window.location.hash || '').replace(/^#\/?/, '').split('/')[0].toLowerCase().trim(); }
+function getFullPath() { return (window.location.hash || '').replace(/^#\/?/, '').toLowerCase().trim(); }
+function getSegment() { return getFullPath().split('/')[0]; }
 
 function navigate() {
   const seg = getSegment(); const outlet = document.getElementById('app-outlet');
   if (seg === 'dashboard') { renderDashboard(); document.title = 'Dashboard — Job Notification Tracker'; }
   else if (seg === 'saved') { renderSaved(); document.title = 'Saved — Job Notification Tracker'; }
   else if (seg === 'digest') { renderDigest(); document.title = 'Digest — Job Notification Tracker'; }
+  else if (seg === 'jt') {
+    const sub = getFullPath().split('/')[1] || '';
+    if (sub === '07-test') { renderTestChecklist(); document.title = 'Test Checklist — Job Notification Tracker'; }
+    else if (sub === '08-ship') { renderShipPage(); document.title = 'Ship — Job Notification Tracker'; }
+    else { outlet.innerHTML = `<div class="notfound"><p class="notfound__code" aria-hidden="true">404</p><h1 class="notfound__heading">Page Not Found</h1><p class="notfound__sub">This page does not exist.</p><a href="#/" class="ds-btn ds-btn--primary">Go Home</a></div>`; document.title = 'Not Found — Job Notification Tracker'; }
+  }
   else {
     const route = ROUTES[seg];
     if (route) {
