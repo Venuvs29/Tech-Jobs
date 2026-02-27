@@ -1118,6 +1118,199 @@
                 font-size: var(--text-2xl);
             }
         }
+
+        /* ── TOAST ── */
+        .jt-toast {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            z-index: 9999;
+            background: #111827;
+            color: #f9fafb;
+            border-radius: 10px;
+            padding: 12px 22px;
+            font-size: var(--text-sm);
+            font-weight: 500;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, .25);
+            pointer-events: none;
+            animation: toast-in .22s cubic-bezier(.16, 1, .3, 1), toast-out .3s ease 2.3s forwards;
+        }
+
+        @keyframes toast-in {
+            from {
+                opacity: 0;
+                transform: translateY(14px) scale(.97);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes toast-out {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+        }
+
+        /* ── STATUS SELECT ── */
+        .job-card__status-bar {
+            padding-top: var(--space-1);
+            border-top: var(--border);
+            margin-top: var(--space-1);
+        }
+
+        .status-select {
+            width: 100%;
+            padding: 5px 10px;
+            font-size: var(--text-xs);
+            font-weight: 600;
+            border-radius: var(--radius);
+            border: 1px solid var(--color-border);
+            cursor: pointer;
+            appearance: none;
+            font-family: var(--font-sans);
+            transition: background-color var(--transition), border-color var(--transition), color var(--transition);
+        }
+
+        .status-select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(17, 17, 17, .12);
+        }
+
+        .status-select--neutral {
+            background-color: #f9fafb;
+            color: #6b7280;
+            border-color: #e5e7eb;
+        }
+
+        .status-select--blue {
+            background-color: #eff6ff;
+            color: #1d4ed8;
+            border-color: #bfdbfe;
+        }
+
+        .status-select--red {
+            background-color: #fef2f2;
+            color: #b91c1c;
+            border-color: #fecaca;
+        }
+
+        .status-select--green {
+            background-color: #f0fdf4;
+            color: #166534;
+            border-color: #bbf7d0;
+        }
+
+        /* ── DIGEST STATUS CARD ── */
+        .digest-status-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .07), 0 0 0 1px rgba(0, 0, 0, .04);
+            overflow: hidden;
+            margin-top: var(--space-3);
+        }
+
+        .digest-status-card__header {
+            padding: var(--space-2) var(--space-4);
+            border-bottom: 1px solid #f0eee9;
+            background: #fdfcfb;
+            font-family: var(--font-serif);
+            font-weight: 700;
+            font-size: var(--text-md);
+            color: var(--color-text-primary);
+        }
+
+        .digest-status-card__body {
+            padding: 0;
+        }
+
+        .digest-status-row {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: 12px var(--space-4);
+            border-bottom: 1px solid #f5f4f0;
+            font-size: var(--text-sm);
+        }
+
+        .digest-status-row:last-child {
+            border-bottom: none;
+        }
+
+        .digest-status-row__info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .digest-status-row__title {
+            font-weight: 600;
+            color: var(--color-text-primary);
+            font-size: var(--text-sm);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .digest-status-row__company {
+            font-size: var(--text-xs);
+            color: var(--color-text-secondary);
+            margin-top: 1px;
+        }
+
+        .digest-status-row__date {
+            font-size: var(--text-xs);
+            color: var(--color-text-secondary);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .digest-status-badge {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: var(--radius-full);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .status-badge--neutral {
+            background: #f3f4f6;
+            color: #6b7280;
+            border: 1px solid #e5e7eb;
+        }
+
+        .status-badge--blue {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+        }
+
+        .status-badge--red {
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .status-badge--green {
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .digest-status-empty {
+            padding: var(--space-3) var(--space-4);
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+            font-style: italic;
+        }
     </style>
 </head>
 

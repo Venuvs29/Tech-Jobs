@@ -16,6 +16,47 @@ const PREFS_KEY = 'jobTrackerPreferences';
 function getPrefs() { try { return JSON.parse(localStorage.getItem(PREFS_KEY)) || null; } catch (_) { return null; } }
 function savePrefs(p) { localStorage.setItem(PREFS_KEY, JSON.stringify(p)); }
 
+/* ── JOB STATUS ── */
+const STATUS_KEY = 'jobTrackerStatus';
+const STATUS_LOG_KEY = 'jobTrackerStatusLog';
+const STATUS_LIST = ['Not Applied', 'Applied', 'Rejected', 'Selected'];
+function getStatuses() { try { return JSON.parse(localStorage.getItem(STATUS_KEY)) || {}; } catch (_) { return {}; } }
+function getStatus(id) { return getStatuses()[id] || 'Not Applied'; }
+function setStatus(id, status) { const m = getStatuses(); m[id] = status; localStorage.setItem(STATUS_KEY, JSON.stringify(m)); }
+function getStatusLog() { try { return JSON.parse(localStorage.getItem(STATUS_LOG_KEY)) || []; } catch (_) { return []; } }
+function logStatusChange(id, title, company, status) {
+  const log = getStatusLog();
+  log.unshift({ id, title, company, status, date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) });
+  localStorage.setItem(STATUS_LOG_KEY, JSON.stringify(log.slice(0, 50)));
+}
+function statusColorClass(status) {
+  if (status === 'Applied') return 'blue';
+  if (status === 'Rejected') return 'red';
+  if (status === 'Selected') return 'green';
+  return 'neutral';
+}
+
+/* ── TOAST ── */
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.className = 'jt-toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2800);
+}
+
+/* ── STATUS CHANGE HANDLER ── */
+function handleStatusChange(select) {
+  const id = Number(select.dataset.id);
+  const status = select.value;
+  setStatus(id, status);
+  const cls = statusColorClass(status);
+  select.className = `status-select status-select--${cls}`;
+  const job = (window.JOBS || []).find(j => j.id === id);
+  if (job) logStatusChange(id, job.title, job.company, status);
+  if (status !== 'Not Applied') showToast('Status updated: ' + status);
+}
+
 /* ── DIGEST ── */
 const DIGEST_KEY_PREFIX = 'jobTrackerDigest_';
 function getTodayKey() {
@@ -125,12 +166,15 @@ function scoreBadgeHTML(score) {
 function salaryNum(s) { const m = s.replace(/[₹,]/g, '').match(/\d+/); return m ? parseInt(m[0]) : 0; }
 
 /* ── FILTER STATE ── */
-const F = { keyword: '', location: '', mode: '', experience: '', source: '', sort: 'latest', onlyMatches: false };
+const F = { keyword: '', location: '', mode: '', experience: '', source: '', sort: 'latest', onlyMatches: false, status: '' };
 
 /* ── JOB CARD ── */
 function jobCardHTML(j, prefs) {
   const score = computeMatchScore(j, prefs);
   const saved = isSaved(j.id);
+  const status = getStatus(j.id);
+  const cls = statusColorClass(status);
+  const opts = STATUS_LIST.map(s => `<option${s === status ? ' selected' : ''}>${esc(s)}</option>`).join('');
   return `<article class="job-card" data-id="${j.id}">
     <div class="job-card__top">
       <div style="flex:1;min-width:0;">
@@ -153,6 +197,9 @@ function jobCardHTML(j, prefs) {
         <a class="ds-btn ds-btn--primary ds-btn--sm" href="${esc(j.applyUrl)}" target="_blank" rel="noopener">Apply</a>
       </div>
     </div>
+    <div class="job-card__status-bar">
+      <select class="status-select status-select--${cls}" data-id="${j.id}" onchange="handleStatusChange(this)" aria-label="Application status">${opts}</select>
+    </div>
   </article>`;
 }
 
@@ -165,6 +212,7 @@ function filterJobs(jobs, prefs) {
   if (F.mode) result = result.filter(j => j.mode === F.mode);
   if (F.experience) result = result.filter(j => j.experience === F.experience);
   if (F.source) result = result.filter(j => j.source === F.source);
+  if (F.status) result = result.filter(j => getStatus(j.id) === F.status);
   if (F.onlyMatches && prefs) {
     const thresh = Number(prefs.minMatchScore) || 40;
     result = result.filter(j => (computeMatchScore(j, prefs) || 0) >= thresh);
@@ -224,6 +272,13 @@ function renderDashboard() {
         </select></div>
       </div>
       <div class="filter-group">
+        <label class="filter-label" for="f-status">Status</label>
+        <div class="filter-select-wrap"><select class="filter-input" id="f-status">
+          <option value="">All</option>
+          ${STATUS_LIST.map(s => `<option value="${esc(s)}"${F.status === s ? ' selected' : ''}>${esc(s)}</option>`).join('')}
+        </select></div>
+      </div>
+      <div class="filter-group">
         <label class="filter-label" for="f-sort">Sort</label>
         <div class="filter-select-wrap"><select class="filter-input" id="f-sort">
           <option value="latest"${F.sort === 'latest' ? ' selected' : ''}>Latest first</option>
@@ -262,10 +317,10 @@ function renderJobResults() {
 
 function bindFilters() {
   const b = (id, key) => { const el = document.getElementById(id); if (!el) return; el.addEventListener('input', () => { F[key] = el.value; renderJobResults(); }); };
-  b('f-keyword', 'keyword'); b('f-location', 'location'); b('f-mode', 'mode'); b('f-exp', 'experience'); b('f-source', 'source'); b('f-sort', 'sort');
+  b('f-keyword', 'keyword'); b('f-location', 'location'); b('f-mode', 'mode'); b('f-exp', 'experience'); b('f-source', 'source'); b('f-sort', 'sort'); b('f-status', 'status');
 }
 
-function clearFilters() { Object.assign(F, { keyword: '', location: '', mode: '', experience: '', source: '', sort: 'latest', onlyMatches: false }); renderDashboard(); }
+function clearFilters() { Object.assign(F, { keyword: '', location: '', mode: '', experience: '', source: '', sort: 'latest', onlyMatches: false, status: '' }); renderDashboard(); }
 
 /* ── RENDER SAVED ── */
 function renderSaved() {
@@ -390,6 +445,20 @@ function renderDigest() {
         </div>`;
   }).join('');
 
+  /* ── Status Updates Section ── */
+  const log = getStatusLog().slice(0, 10);
+  const statusBadgeCls = s => s === 'Applied' ? 'status-badge--blue' : s === 'Rejected' ? 'status-badge--red' : s === 'Selected' ? 'status-badge--green' : 'status-badge--neutral';
+  const statusRows = log.length
+    ? log.map(e => `<div class="digest-status-row">
+        <div class="digest-status-row__info">
+          <p class="digest-status-row__title">${esc(e.title)}</p>
+          <p class="digest-status-row__company">${esc(e.company)}</p>
+        </div>
+        <span class="digest-status-badge ${statusBadgeCls(e.status)}">${esc(e.status)}</span>
+        <span class="digest-status-row__date">${esc(e.date)}</span>
+      </div>`).join('')
+    : `<p class="digest-status-empty">No status changes recorded yet.</p>`;
+
   outlet.innerHTML = `<div class="digest-page">
         <div class="digest-wrapper">
             <div class="digest-demo-note">📋 Demo Mode: Daily 9AM trigger simulated manually${isPersisted ? ' &nbsp;·&nbsp; <strong>Loaded from cache</strong>' : ' &nbsp;·&nbsp; <strong>Freshly generated</strong>'}.</div>
@@ -410,6 +479,10 @@ function renderDigest() {
                 </div>
                 <div class="digest-card__body">${jobRows}</div>
                 <div class="digest-card__footer">This digest was generated based on your preferences.</div>
+            </div>
+            <div class="digest-status-card" role="region" aria-label="Recent Status Updates">
+                <div class="digest-status-card__header">Recent Status Updates</div>
+                <div class="digest-status-card__body">${statusRows}</div>
             </div>
         </div>
     </div>`;
