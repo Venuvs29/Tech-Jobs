@@ -902,6 +902,195 @@
             }
         }
 
+        /* DIGEST PAGE */
+        .digest-page {
+            background: #F7F6F3;
+            min-height: calc(100vh - var(--topbar-height) - 57px);
+            display: flex;
+            justify-content: center;
+            padding: var(--space-4) var(--space-3);
+        }
+
+        .digest-wrapper {
+            width: 100%;
+            max-width: 720px;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+
+        .digest-demo-note {
+            display: inline-flex;
+            align-items: center;
+            align-self: flex-start;
+            gap: 6px;
+            font-size: var(--text-xs);
+            color: #6b7280;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: var(--radius-full);
+            padding: 4px 12px;
+            font-weight: 500;
+        }
+
+        .digest-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-1);
+            align-items: center;
+        }
+
+        .digest-actions--center {
+            justify-content: center;
+            margin-bottom: var(--space-2);
+        }
+
+        .digest-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .07), 0 0 0 1px rgba(0, 0, 0, .04);
+            overflow: hidden;
+        }
+
+        .digest-card__header {
+            padding: var(--space-3) var(--space-4);
+            border-bottom: 1px solid #f0eee9;
+            background: #fdfcfb;
+        }
+
+        .digest-trigger-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: var(--space-2);
+        }
+
+        .digest-card__heading {
+            font-family: var(--font-serif);
+            font-size: var(--text-xl);
+            font-weight: 700;
+            color: var(--color-text-primary);
+            letter-spacing: var(--tracking-tight);
+            line-height: var(--leading-tight);
+            margin-bottom: 4px;
+        }
+
+        .digest-card__date {
+            font-size: var(--text-sm);
+            color: var(--color-text-secondary);
+        }
+
+        .digest-card__body {
+            padding: 0;
+        }
+
+        .digest-job-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            padding: var(--space-2) var(--space-4);
+            border-bottom: 1px solid #f5f4f0;
+            transition: background-color var(--transition);
+        }
+
+        .digest-job-item:last-child {
+            border-bottom: none;
+        }
+
+        .digest-job-item:hover {
+            background: #fdfcfb;
+        }
+
+        .digest-job-item__num {
+            font-family: var(--font-serif);
+            font-size: 22px;
+            font-weight: 700;
+            color: #d1cec7;
+            min-width: 28px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .digest-job-item__info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .digest-job-item__title {
+            font-family: var(--font-serif);
+            font-size: var(--text-base);
+            font-weight: 600;
+            color: var(--color-text-primary);
+            line-height: var(--leading-tight);
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .digest-job-item__company {
+            font-size: var(--text-sm);
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 2px;
+        }
+
+        .digest-job-item__meta {
+            font-size: var(--text-xs);
+            color: var(--color-text-secondary);
+        }
+
+        .digest-job-item__right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .digest-card__footer {
+            padding: var(--space-2) var(--space-4);
+            border-top: 1px solid #f0eee9;
+            background: #fdfcfb;
+            font-size: var(--text-xs);
+            color: var(--color-text-secondary);
+            font-style: italic;
+            text-align: center;
+        }
+
+        .digest-blocking {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: var(--space-5) var(--space-4);
+            min-height: 360px;
+            gap: var(--space-2);
+            width: 100%;
+        }
+
+        @media(max-width: 600px) {
+            .digest-trigger-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .digest-job-item {
+                flex-wrap: wrap;
+                gap: var(--space-1);
+            }
+
+            .digest-job-item__right {
+                flex-direction: row;
+                align-items: center;
+                width: 100%;
+                justify-content: flex-start;
+                padding-left: calc(28px + var(--space-2));
+            }
+        }
+
         @media(max-width:640px) {
             .app-nav__links {
                 display: none;
@@ -1004,6 +1193,8 @@
                     Layer</span>
                 <span class="ds-checklist__item ds-checklist__item--done"><span class="ds-checklist__box"></span>Match
                     Engine</span>
+                <span class="ds-checklist__item ds-checklist__item--done"><span class="ds-checklist__box"></span>Digest
+                    Engine</span>
                 <span class="ds-checklist__item"><span class="ds-checklist__box"></span>Deployed</span>
             </div>
         </div>
@@ -1040,18 +1231,9 @@
     </template>
 
     <template id="tpl-digest">
-        <div class="empty-state">
-            <div class="empty-state__ring" aria-hidden="true">
-                <div class="empty-state__ring-inner"></div>
-            </div>
-            <p class="ds-eyebrow">Daily Digest</p>
-            <h1 class="empty-state__heading">Your 9AM briefing.</h1>
-            <p class="empty-state__sub">Every morning, a curated summary of the highest-match roles will be compiled
-                here — no noise, no duplicates.</p>
-            <a href="#/settings" class="ds-btn ds-btn--secondary" style="margin-top:var(--space-2);">Configure
-                Preferences</a>
-        </div>
+        <!-- digest is rendered dynamically by renderDigest() -->
     </template>
+
 
     <template id="tpl-settings">
         <div class="page-wrap">
@@ -1225,8 +1407,10 @@
                         <span class="ds-checklist__item ds-checklist__item--done"><span
                                 class="ds-checklist__box"></span><span><strong>Match Engine</strong> — Preferences form,
                                 8-rule scoring, badges, match toggle, salary/score sort</span></span>
-                        <span class="ds-checklist__item"><span class="ds-checklist__box"></span><span><strong>Digest
-                                    Logic</strong> — Daily 9AM summary generation</span></span>
+                        <span class="ds-checklist__item ds-checklist__item--done"><span
+                                class="ds-checklist__box"></span><span><strong>Digest
+                                    Logic</strong> — Daily 9AM summary generation, localStorage persistence, copy &amp;
+                                email draft</span></span>
                         <span class="ds-checklist__item"><span
                                 class="ds-checklist__box"></span><span><strong>Deployed</strong> — Live on hosting
                                 platform</span></span>

@@ -16,6 +16,69 @@ const PREFS_KEY = 'jobTrackerPreferences';
 function getPrefs() { try { return JSON.parse(localStorage.getItem(PREFS_KEY)) || null; } catch (_) { return null; } }
 function savePrefs(p) { localStorage.setItem(PREFS_KEY, JSON.stringify(p)); }
 
+/* ── DIGEST ── */
+const DIGEST_KEY_PREFIX = 'jobTrackerDigest_';
+function getTodayKey() {
+  const d = new Date();
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `${DIGEST_KEY_PREFIX}${yyyy}-${mm}-${dd}`;
+}
+function getTodayLabel() {
+  return new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
+function generateDigest(prefs) {
+  const jobs = window.JOBS || [];
+  const scored = jobs
+    .map(j => ({ ...j, _score: computeMatchScore(j, prefs) || 0 }))
+    .filter(j => j._score > 0)
+    .sort((a, b) => b._score !== a._score ? b._score - a._score : a.postedDaysAgo - b.postedDaysAgo)
+    .slice(0, 10);
+  localStorage.setItem(getTodayKey(), JSON.stringify(scored));
+  return scored;
+}
+function loadOrGenerateDigest(prefs) {
+  const key = getTodayKey();
+  const existing = localStorage.getItem(key);
+  if (existing) { try { return JSON.parse(existing); } catch (_) { } }
+  return generateDigest(prefs);
+}
+function digestPlainText(jobs) {
+  const date = getTodayLabel();
+  let lines = [`Top 10 Jobs For You — 9AM Digest`, `Date: ${date}`, ``, `---`];
+  jobs.forEach((j, i) => {
+    lines.push(``);
+    lines.push(`${i + 1}. ${j.title} at ${j.company}`);
+    lines.push(`   Location : ${j.location} · ${j.mode}`);
+    lines.push(`   Experience: ${j.experience}`);
+    lines.push(`   Match Score: ${j._score}%`);
+    lines.push(`   Apply: ${j.applyUrl}`);
+  });
+  lines.push(``, `---`, `This digest was generated based on your preferences.`);
+  return lines.join('\n');
+}
+function copyDigest() {
+  const key = getTodayKey();
+  const raw = localStorage.getItem(key);
+  if (!raw) { alert('Generate a digest first.'); return; }
+  let jobs; try { jobs = JSON.parse(raw); } catch (_) { return; }
+  const text = digestPlainText(jobs);
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('digest-copy-btn');
+    if (btn) { const orig = btn.textContent; btn.textContent = 'Copied ✓'; setTimeout(() => btn.textContent = orig, 2000); }
+  }).catch(() => { alert('Could not access clipboard. Please copy manually.'); });
+}
+function emailDigest() {
+  const key = getTodayKey();
+  const raw = localStorage.getItem(key);
+  if (!raw) { alert('Generate a digest first.'); return; }
+  let jobs; try { jobs = JSON.parse(raw); } catch (_) { return; }
+  const subject = encodeURIComponent('My 9AM Job Digest');
+  const body = encodeURIComponent(digestPlainText(jobs));
+  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+}
+
 /* ── MATCH SCORE ENGINE ──
    +25 keyword in title
    +15 keyword in description
@@ -28,35 +91,35 @@ function savePrefs(p) { localStorage.setItem(PREFS_KEY, JSON.stringify(p)); }
    Cap: 100
 */
 function computeMatchScore(job, prefs) {
-    if (!prefs) return null;
-    let score = 0;
-    const kws = (prefs.roleKeywords || '').split(',').map(k => k.trim().toLowerCase()).filter(Boolean);
-    const skills = (prefs.skills || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
-    const locs = Array.isArray(prefs.preferredLocations) ? prefs.preferredLocations : [];
-    const modes = Array.isArray(prefs.preferredMode) ? prefs.preferredMode : [];
-    if (kws.length) {
-        if (kws.some(k => job.title.toLowerCase().includes(k))) score += 25;
-        if (kws.some(k => job.description.toLowerCase().includes(k))) score += 15;
-    }
-    if (locs.length && locs.includes(job.location)) score += 15;
-    if (modes.length && modes.includes(job.mode)) score += 10;
-    if (prefs.experienceLevel && job.experience === prefs.experienceLevel) score += 10;
-    if (skills.length) {
-        const jsl = job.skills.map(s => s.toLowerCase());
-        if (skills.some(sk => jsl.some(js => js.includes(sk) || sk.includes(js)))) score += 15;
-    }
-    if (job.postedDaysAgo <= 2) score += 5;
-    if (job.source === 'LinkedIn') score += 5;
-    return Math.min(score, 100);
+  if (!prefs) return null;
+  let score = 0;
+  const kws = (prefs.roleKeywords || '').split(',').map(k => k.trim().toLowerCase()).filter(Boolean);
+  const skills = (prefs.skills || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+  const locs = Array.isArray(prefs.preferredLocations) ? prefs.preferredLocations : [];
+  const modes = Array.isArray(prefs.preferredMode) ? prefs.preferredMode : [];
+  if (kws.length) {
+    if (kws.some(k => job.title.toLowerCase().includes(k))) score += 25;
+    if (kws.some(k => job.description.toLowerCase().includes(k))) score += 15;
+  }
+  if (locs.length && locs.includes(job.location)) score += 15;
+  if (modes.length && modes.includes(job.mode)) score += 10;
+  if (prefs.experienceLevel && job.experience === prefs.experienceLevel) score += 10;
+  if (skills.length) {
+    const jsl = job.skills.map(s => s.toLowerCase());
+    if (skills.some(sk => jsl.some(js => js.includes(sk) || sk.includes(js)))) score += 15;
+  }
+  if (job.postedDaysAgo <= 2) score += 5;
+  if (job.source === 'LinkedIn') score += 5;
+  return Math.min(score, 100);
 }
 
 function scoreBadgeHTML(score) {
-    if (score === null) return '';
-    let cls = 'score--none';
-    if (score >= 80) cls = 'score--high';
-    else if (score >= 60) cls = 'score--mid';
-    else if (score >= 40) cls = 'score--low';
-    return `<span class="score-badge ${cls}" title="Match score">${score}%</span>`;
+  if (score === null) return '';
+  let cls = 'score--none';
+  if (score >= 80) cls = 'score--high';
+  else if (score >= 60) cls = 'score--mid';
+  else if (score >= 40) cls = 'score--low';
+  return `<span class="score-badge ${cls}" title="Match score">${score}%</span>`;
 }
 
 function salaryNum(s) { const m = s.replace(/[₹,]/g, '').match(/\d+/); return m ? parseInt(m[0]) : 0; }
@@ -66,9 +129,9 @@ const F = { keyword: '', location: '', mode: '', experience: '', source: '', sor
 
 /* ── JOB CARD ── */
 function jobCardHTML(j, prefs) {
-    const score = computeMatchScore(j, prefs);
-    const saved = isSaved(j.id);
-    return `<article class="job-card" data-id="${j.id}">
+  const score = computeMatchScore(j, prefs);
+  const saved = isSaved(j.id);
+  return `<article class="job-card" data-id="${j.id}">
     <div class="job-card__top">
       <div style="flex:1;min-width:0;">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
@@ -95,32 +158,32 @@ function jobCardHTML(j, prefs) {
 
 /* ── FILTER + SORT ── */
 function filterJobs(jobs, prefs) {
-    let result = [...jobs];
-    const kw = F.keyword.toLowerCase().trim();
-    if (kw) result = result.filter(j => j.title.toLowerCase().includes(kw) || j.company.toLowerCase().includes(kw) || j.skills.some(s => s.toLowerCase().includes(kw)));
-    if (F.location) result = result.filter(j => j.location === F.location || (F.location === 'Remote' && j.mode === 'Remote'));
-    if (F.mode) result = result.filter(j => j.mode === F.mode);
-    if (F.experience) result = result.filter(j => j.experience === F.experience);
-    if (F.source) result = result.filter(j => j.source === F.source);
-    if (F.onlyMatches && prefs) {
-        const thresh = Number(prefs.minMatchScore) || 40;
-        result = result.filter(j => (computeMatchScore(j, prefs) || 0) >= thresh);
-    }
-    if (F.sort === 'latest') result.sort((a, b) => a.postedDaysAgo - b.postedDaysAgo);
-    else if (F.sort === 'oldest') result.sort((a, b) => b.postedDaysAgo - a.postedDaysAgo);
-    else if (F.sort === 'score' && prefs) result.sort((a, b) => (computeMatchScore(b, prefs) || 0) - (computeMatchScore(a, prefs) || 0));
-    else if (F.sort === 'salary') result.sort((a, b) => salaryNum(b.salaryRange) - salaryNum(a.salaryRange));
-    return result;
+  let result = [...jobs];
+  const kw = F.keyword.toLowerCase().trim();
+  if (kw) result = result.filter(j => j.title.toLowerCase().includes(kw) || j.company.toLowerCase().includes(kw) || j.skills.some(s => s.toLowerCase().includes(kw)));
+  if (F.location) result = result.filter(j => j.location === F.location || (F.location === 'Remote' && j.mode === 'Remote'));
+  if (F.mode) result = result.filter(j => j.mode === F.mode);
+  if (F.experience) result = result.filter(j => j.experience === F.experience);
+  if (F.source) result = result.filter(j => j.source === F.source);
+  if (F.onlyMatches && prefs) {
+    const thresh = Number(prefs.minMatchScore) || 40;
+    result = result.filter(j => (computeMatchScore(j, prefs) || 0) >= thresh);
+  }
+  if (F.sort === 'latest') result.sort((a, b) => a.postedDaysAgo - b.postedDaysAgo);
+  else if (F.sort === 'oldest') result.sort((a, b) => b.postedDaysAgo - a.postedDaysAgo);
+  else if (F.sort === 'score' && prefs) result.sort((a, b) => (computeMatchScore(b, prefs) || 0) - (computeMatchScore(a, prefs) || 0));
+  else if (F.sort === 'salary') result.sort((a, b) => salaryNum(b.salaryRange) - salaryNum(a.salaryRange));
+  return result;
 }
 
 /* ── RENDER DASHBOARD ── */
 function renderDashboard() {
-    const jobs = window.JOBS || [];
-    const prefs = getPrefs();
-    const locs = [...new Set(jobs.map(j => j.location))].sort();
-    const outlet = document.getElementById('app-outlet');
-    const noPrefs = prefs ? '' : '<div class="no-prefs-banner"><span class="no-prefs-banner__icon">✦</span><span>Set your preferences to activate intelligent matching.</span><a href="#/settings" class="ds-btn ds-btn--secondary ds-btn--sm">Go to Settings</a></div>';
-    outlet.innerHTML = `<div class="page-wrap">
+  const jobs = window.JOBS || [];
+  const prefs = getPrefs();
+  const locs = [...new Set(jobs.map(j => j.location))].sort();
+  const outlet = document.getElementById('app-outlet');
+  const noPrefs = prefs ? '' : '<div class="no-prefs-banner"><span class="no-prefs-banner__icon">✦</span><span>Set your preferences to activate intelligent matching.</span><a href="#/settings" class="ds-btn ds-btn--secondary ds-btn--sm">Go to Settings</a></div>';
+  outlet.innerHTML = `<div class="page-wrap">
     <header class="page-header">
       <p class="page-header__eyebrow">Live Listings</p>
       <h1 class="page-header__heading">Dashboard</h1>
@@ -180,65 +243,65 @@ function renderDashboard() {
     </div>
     <div id="job-results"></div>
   </div>`;
-    document.getElementById('only-matches').addEventListener('change', e => { F.onlyMatches = e.target.checked; renderJobResults(); });
-    bindFilters();
-    renderJobResults();
+  document.getElementById('only-matches').addEventListener('change', e => { F.onlyMatches = e.target.checked; renderJobResults(); });
+  bindFilters();
+  renderJobResults();
 }
 
 function renderJobResults() {
-    const prefs = getPrefs();
-    const filtered = filterJobs(window.JOBS || [], prefs);
-    const container = document.getElementById('job-results');
-    if (!container) return;
-    if (!filtered.length) {
-        container.innerHTML = `<div class="empty-state"><div class="empty-state__ring" aria-hidden="true"><div class="empty-state__ring-inner"></div></div><h2 class="empty-state__heading">No roles match your criteria.</h2><p class="empty-state__sub">Adjust filters, clear search, or lower your threshold.</p><button class="ds-btn ds-btn--secondary" style="margin-top:var(--space-2);" onclick="clearFilters()">Clear Filters</button></div>`;
-        return;
-    }
-    container.innerHTML = `<p class="job-count">${filtered.length} role${filtered.length !== 1 ? 's' : ''} found</p><div class="job-grid">${filtered.map(j => jobCardHTML(j, prefs)).join('')}</div>`;
+  const prefs = getPrefs();
+  const filtered = filterJobs(window.JOBS || [], prefs);
+  const container = document.getElementById('job-results');
+  if (!container) return;
+  if (!filtered.length) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-state__ring" aria-hidden="true"><div class="empty-state__ring-inner"></div></div><h2 class="empty-state__heading">No roles match your criteria.</h2><p class="empty-state__sub">Adjust filters, clear search, or lower your threshold.</p><button class="ds-btn ds-btn--secondary" style="margin-top:var(--space-2);" onclick="clearFilters()">Clear Filters</button></div>`;
+    return;
+  }
+  container.innerHTML = `<p class="job-count">${filtered.length} role${filtered.length !== 1 ? 's' : ''} found</p><div class="job-grid">${filtered.map(j => jobCardHTML(j, prefs)).join('')}</div>`;
 }
 
 function bindFilters() {
-    const b = (id, key) => { const el = document.getElementById(id); if (!el) return; el.addEventListener('input', () => { F[key] = el.value; renderJobResults(); }); };
-    b('f-keyword', 'keyword'); b('f-location', 'location'); b('f-mode', 'mode'); b('f-exp', 'experience'); b('f-source', 'source'); b('f-sort', 'sort');
+  const b = (id, key) => { const el = document.getElementById(id); if (!el) return; el.addEventListener('input', () => { F[key] = el.value; renderJobResults(); }); };
+  b('f-keyword', 'keyword'); b('f-location', 'location'); b('f-mode', 'mode'); b('f-exp', 'experience'); b('f-source', 'source'); b('f-sort', 'sort');
 }
 
 function clearFilters() { Object.assign(F, { keyword: '', location: '', mode: '', experience: '', source: '', sort: 'latest', onlyMatches: false }); renderDashboard(); }
 
 /* ── RENDER SAVED ── */
 function renderSaved() {
-    const saved = getSaved(); const prefs = getPrefs();
-    const jobs = (window.JOBS || []).filter(j => saved.has(j.id));
-    const outlet = document.getElementById('app-outlet');
-    if (!jobs.length) {
-        outlet.innerHTML = `<div class="empty-state"><div class="empty-state__ring" aria-hidden="true"><div class="empty-state__ring-inner"></div></div><p class="ds-eyebrow">Saved Roles</p><h1 class="empty-state__heading">Your shortlist lives here.</h1><p class="empty-state__sub">Roles you bookmark from the dashboard will appear here.</p><a href="#/dashboard" class="ds-btn ds-btn--secondary" style="margin-top:var(--space-2);">Browse Dashboard</a></div>`;
-        return;
-    }
-    outlet.innerHTML = `<div class="page-wrap"><header class="page-header"><p class="page-header__eyebrow">Saved Roles</p><h1 class="page-header__heading">Your Shortlist</h1><p class="page-header__sub">${jobs.length} role${jobs.length !== 1 ? 's' : ''} saved.</p></header><div class="job-grid">${jobs.map(j => jobCardHTML(j, prefs)).join('')}</div></div>`;
+  const saved = getSaved(); const prefs = getPrefs();
+  const jobs = (window.JOBS || []).filter(j => saved.has(j.id));
+  const outlet = document.getElementById('app-outlet');
+  if (!jobs.length) {
+    outlet.innerHTML = `<div class="empty-state"><div class="empty-state__ring" aria-hidden="true"><div class="empty-state__ring-inner"></div></div><p class="ds-eyebrow">Saved Roles</p><h1 class="empty-state__heading">Your shortlist lives here.</h1><p class="empty-state__sub">Roles you bookmark from the dashboard will appear here.</p><a href="#/dashboard" class="ds-btn ds-btn--secondary" style="margin-top:var(--space-2);">Browse Dashboard</a></div>`;
+    return;
+  }
+  outlet.innerHTML = `<div class="page-wrap"><header class="page-header"><p class="page-header__eyebrow">Saved Roles</p><h1 class="page-header__heading">Your Shortlist</h1><p class="page-header__sub">${jobs.length} role${jobs.length !== 1 ? 's' : ''} saved.</p></header><div class="job-grid">${jobs.map(j => jobCardHTML(j, prefs)).join('')}</div></div>`;
 }
 
 /* ── MODAL ── */
 function openModal(id) {
-    const j = (window.JOBS || []).find(x => x.id === id); if (!j) return;
-    const prefs = getPrefs(); const score = computeMatchScore(j, prefs);
-    document.getElementById('modal-title').textContent = j.title;
-    document.getElementById('modal-company').textContent = j.company;
-    document.getElementById('modal-meta').innerHTML = [
-        `<span class="modal__meta-item"><strong>${j.location}</strong></span>`,
-        `<span class="modal__meta-item">· ${j.mode}</span>`,
-        `<span class="modal__meta-item">· ${j.experience === 'Fresher' ? 'Fresher' : j.experience + ' yrs'}</span>`,
-        `<span class="modal__meta-item">· <strong>${j.salaryRange}</strong></span>`,
-        `<span class="modal__meta-item">· ${postedLabel(j.postedDaysAgo)}</span>`,
-        score !== null ? `<span class="modal__meta-item" style="margin-left:auto;">${scoreBadgeHTML(score)}</span>` : '',
-        `<span class="modal__meta-item" style="margin-left:${score !== null ? '4px' : 'auto'};"><span class="source-badge source-badge--${esc(j.source)}">${esc(j.source)}</span></span>`
-    ].join('');
-    document.getElementById('modal-desc').textContent = j.description;
-    document.getElementById('modal-skills').innerHTML = j.skills.map(s => `<span class="job-card__tag">${esc(s)}</span>`).join('');
-    document.getElementById('modal-apply-btn').href = j.applyUrl;
-    const sb = document.getElementById('modal-save-btn');
-    sb.textContent = isSaved(id) ? 'Saved ✓' : 'Save Role';
-    sb.onclick = () => { toggleSave(id); sb.textContent = isSaved(id) ? 'Saved ✓' : 'Save Role'; syncSaveBtns(id); };
-    document.getElementById('job-modal').classList.add('is-open');
-    document.body.style.overflow = 'hidden';
+  const j = (window.JOBS || []).find(x => x.id === id); if (!j) return;
+  const prefs = getPrefs(); const score = computeMatchScore(j, prefs);
+  document.getElementById('modal-title').textContent = j.title;
+  document.getElementById('modal-company').textContent = j.company;
+  document.getElementById('modal-meta').innerHTML = [
+    `<span class="modal__meta-item"><strong>${j.location}</strong></span>`,
+    `<span class="modal__meta-item">· ${j.mode}</span>`,
+    `<span class="modal__meta-item">· ${j.experience === 'Fresher' ? 'Fresher' : j.experience + ' yrs'}</span>`,
+    `<span class="modal__meta-item">· <strong>${j.salaryRange}</strong></span>`,
+    `<span class="modal__meta-item">· ${postedLabel(j.postedDaysAgo)}</span>`,
+    score !== null ? `<span class="modal__meta-item" style="margin-left:auto;">${scoreBadgeHTML(score)}</span>` : '',
+    `<span class="modal__meta-item" style="margin-left:${score !== null ? '4px' : 'auto'};"><span class="source-badge source-badge--${esc(j.source)}">${esc(j.source)}</span></span>`
+  ].join('');
+  document.getElementById('modal-desc').textContent = j.description;
+  document.getElementById('modal-skills').innerHTML = j.skills.map(s => `<span class="job-card__tag">${esc(s)}</span>`).join('');
+  document.getElementById('modal-apply-btn').href = j.applyUrl;
+  const sb = document.getElementById('modal-save-btn');
+  sb.textContent = isSaved(id) ? 'Saved ✓' : 'Save Role';
+  sb.onclick = () => { toggleSave(id); sb.textContent = isSaved(id) ? 'Saved ✓' : 'Save Role'; syncSaveBtns(id); };
+  document.getElementById('job-modal').classList.add('is-open');
+  document.body.style.overflow = 'hidden';
 }
 
 function closeModal() { document.getElementById('job-modal').classList.remove('is-open'); document.body.style.overflow = ''; }
@@ -251,65 +314,136 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal
 
 /* ── SETTINGS ── */
 function bindSettingsUI() {
-    const form = document.getElementById('settings-form');
-    if (!form) return;
-    const prefs = getPrefs();
-    if (prefs) {
-        const kw = form.querySelector('#pref-keywords'); if (kw) kw.value = prefs.roleKeywords || '';
-        const sk = form.querySelector('#pref-skills'); if (sk) sk.value = prefs.skills || '';
-        const ex = form.querySelector('#pref-exp'); if (ex) ex.value = prefs.experienceLevel || '';
-        const sl = form.querySelector('#pref-score');
-        const sv = form.querySelector('#score-val');
-        if (sl) { sl.value = prefs.minMatchScore || 40; if (sv) sv.textContent = (prefs.minMatchScore || 40) + '%'; }
-        const lm = form.querySelector('#pref-locations');
-        if (lm && prefs.preferredLocations) { [...lm.options].forEach(o => { o.selected = prefs.preferredLocations.includes(o.value); }); }
-        const cbs = form.querySelectorAll('.mode-cb');
-        cbs.forEach(cb => { const modes = prefs.preferredMode || []; cb.checked = modes.includes(cb.value); });
-    }
-    const sl = form.querySelector('#pref-score'); const sv = form.querySelector('#score-val');
-    if (sl && sv) { sl.addEventListener('input', () => sv.textContent = sl.value + '%'); }
-    form.addEventListener('submit', e => {
-        e.preventDefault();
-        const data = new FormData(form);
-        const lm = form.querySelector('#pref-locations');
-        const selectedLocs = lm ? [...lm.selectedOptions].map(o => o.value) : [];
-        const selectedModes = [...form.querySelectorAll('.mode-cb:checked')].map(c => c.value);
-        const p = {
-            roleKeywords: data.get('roleKeywords') || '',
-            preferredLocations: selectedLocs,
-            preferredMode: selectedModes,
-            experienceLevel: data.get('experienceLevel') || '',
-            skills: data.get('skills') || '',
-            minMatchScore: parseInt(data.get('minMatchScore')) || 40
-        };
-        savePrefs(p);
-        const msg = form.querySelector('#save-msg');
-        if (msg) { msg.textContent = 'Preferences saved ✓'; msg.style.color = 'var(--color-success)'; setTimeout(() => msg.textContent = '', 2500); }
-    });
+  const form = document.getElementById('settings-form');
+  if (!form) return;
+  const prefs = getPrefs();
+  if (prefs) {
+    const kw = form.querySelector('#pref-keywords'); if (kw) kw.value = prefs.roleKeywords || '';
+    const sk = form.querySelector('#pref-skills'); if (sk) sk.value = prefs.skills || '';
+    const ex = form.querySelector('#pref-exp'); if (ex) ex.value = prefs.experienceLevel || '';
+    const sl = form.querySelector('#pref-score');
+    const sv = form.querySelector('#score-val');
+    if (sl) { sl.value = prefs.minMatchScore || 40; if (sv) sv.textContent = (prefs.minMatchScore || 40) + '%'; }
+    const lm = form.querySelector('#pref-locations');
+    if (lm && prefs.preferredLocations) { [...lm.options].forEach(o => { o.selected = prefs.preferredLocations.includes(o.value); }); }
+    const cbs = form.querySelectorAll('.mode-cb');
+    cbs.forEach(cb => { const modes = prefs.preferredMode || []; cb.checked = modes.includes(cb.value); });
+  }
+  const sl = form.querySelector('#pref-score'); const sv = form.querySelector('#score-val');
+  if (sl && sv) { sl.addEventListener('input', () => sv.textContent = sl.value + '%'); }
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const lm = form.querySelector('#pref-locations');
+    const selectedLocs = lm ? [...lm.selectedOptions].map(o => o.value) : [];
+    const selectedModes = [...form.querySelectorAll('.mode-cb:checked')].map(c => c.value);
+    const p = {
+      roleKeywords: data.get('roleKeywords') || '',
+      preferredLocations: selectedLocs,
+      preferredMode: selectedModes,
+      experienceLevel: data.get('experienceLevel') || '',
+      skills: data.get('skills') || '',
+      minMatchScore: parseInt(data.get('minMatchScore')) || 40
+    };
+    savePrefs(p);
+    const msg = form.querySelector('#save-msg');
+    if (msg) { msg.textContent = 'Preferences saved ✓'; msg.style.color = 'var(--color-success)'; setTimeout(() => msg.textContent = '', 2500); }
+  });
+}
+
+/* ── RENDER DIGEST ── */
+function renderDigest() {
+  const prefs = getPrefs();
+  const outlet = document.getElementById('app-outlet');
+  const date = getTodayLabel();
+  const key = getTodayKey();
+  const isPersisted = !!localStorage.getItem(key);
+
+  if (!prefs) {
+    outlet.innerHTML = `<div class="digest-page"><div class="digest-blocking"><div class="empty-state__ring" aria-hidden="true"><div class="empty-state__ring-inner"></div></div><p class="ds-eyebrow">Daily Digest</p><h1 class="empty-state__heading">Preferences Required</h1><p class="empty-state__sub">Set preferences to generate a personalized digest.</p><a href="#/settings" class="ds-btn ds-btn--primary" style="margin-top:var(--space-2);">Configure Preferences</a></div></div>`;
+    return;
+  }
+
+  const jobs = loadOrGenerateDigest(prefs);
+
+  if (!jobs || jobs.length === 0) {
+    outlet.innerHTML = `<div class="digest-page"><div class="digest-actions digest-actions--center"><a href="#/settings" class="ds-btn ds-btn--secondary ds-btn--sm">← Adjust Preferences</a></div><div class="digest-blocking"><div class="empty-state__ring" aria-hidden="true"><div class="empty-state__ring-inner"></div></div><p class="ds-eyebrow">Daily Digest</p><h1 class="empty-state__heading">No matching roles today.</h1><p class="empty-state__sub">No matching roles today. Check again tomorrow.</p></div></div>`;
+    return;
+  }
+
+  const jobRows = jobs.map((j, i) => {
+    let scoreCls = 'score--none';
+    if (j._score >= 80) scoreCls = 'score--high';
+    else if (j._score >= 60) scoreCls = 'score--mid';
+    else if (j._score >= 40) scoreCls = 'score--low';
+    return `<div class="digest-job-item">
+            <span class="digest-job-item__num">${i + 1}</span>
+            <div class="digest-job-item__info">
+                <p class="digest-job-item__title">${esc(j.title)}</p>
+                <p class="digest-job-item__company">${esc(j.company)}</p>
+                <p class="digest-job-item__meta">${esc(j.location)} &middot; ${esc(j.mode)} &middot; ${esc(j.experience)}</p>
+            </div>
+            <div class="digest-job-item__right">
+                <span class="score-badge ${scoreCls}" title="Match score">${j._score}%</span>
+                <a class="ds-btn ds-btn--primary ds-btn--sm" href="${esc(j.applyUrl)}" target="_blank" rel="noopener">Apply →</a>
+            </div>
+        </div>`;
+  }).join('');
+
+  outlet.innerHTML = `<div class="digest-page">
+        <div class="digest-wrapper">
+            <div class="digest-demo-note">📋 Demo Mode: Daily 9AM trigger simulated manually${isPersisted ? ' &nbsp;·&nbsp; <strong>Loaded from cache</strong>' : ' &nbsp;·&nbsp; <strong>Freshly generated</strong>'}.</div>
+            <div class="digest-actions">
+                <button class="ds-btn ds-btn--secondary ds-btn--sm" onclick="generateAndRefresh()">↺ Regenerate Digest</button>
+                <button class="ds-btn ds-btn--secondary ds-btn--sm" id="digest-copy-btn" onclick="copyDigest()">Copy Digest to Clipboard</button>
+                <button class="ds-btn ds-btn--primary ds-btn--sm" onclick="emailDigest()">✉ Create Email Draft</button>
+            </div>
+            <div class="digest-card" role="article" aria-label="Daily Job Digest">
+                <div class="digest-card__header">
+                    <div class="digest-trigger-bar">
+                        <div>
+                            <h1 class="digest-card__heading">Top 10 Jobs For You — 9AM Digest</h1>
+                            <p class="digest-card__date">${date}</p>
+                        </div>
+                        <button class="ds-btn ds-btn--primary" id="digest-generate-btn" onclick="generateAndRefresh()">Generate Today's 9AM Digest (Simulated)</button>
+                    </div>
+                </div>
+                <div class="digest-card__body">${jobRows}</div>
+                <div class="digest-card__footer">This digest was generated based on your preferences.</div>
+            </div>
+        </div>
+    </div>`;
+}
+
+function generateAndRefresh() {
+  const prefs = getPrefs(); if (!prefs) return;
+  generateDigest(prefs);
+  renderDigest();
 }
 
 /* ── ROUTER ── */
-const ROUTES = { '': { tpl: 'tpl-home', title: 'Home' }, 'digest': { tpl: 'tpl-digest', title: 'Digest' }, 'settings': { tpl: 'tpl-settings', title: 'Settings' }, 'proof': { tpl: 'tpl-proof', title: 'Proof' } };
+const ROUTES = { '': { tpl: 'tpl-home', title: 'Home' }, 'settings': { tpl: 'tpl-settings', title: 'Settings' }, 'proof': { tpl: 'tpl-proof', title: 'Proof' } };
 
 function getSegment() { return (window.location.hash || '').replace(/^#\/?/, '').split('/')[0].toLowerCase().trim(); }
 
 function navigate() {
-    const seg = getSegment(); const outlet = document.getElementById('app-outlet');
-    if (seg === 'dashboard') { renderDashboard(); document.title = 'Dashboard — Job Notification Tracker'; }
-    else if (seg === 'saved') { renderSaved(); document.title = 'Saved — Job Notification Tracker'; }
-    else {
-        const route = ROUTES[seg];
-        if (route) {
-            const tpl = document.getElementById(route.tpl);
-            outlet.innerHTML = ''; if (tpl) outlet.appendChild(tpl.content.cloneNode(true));
-            document.title = `${route.title} — Job Notification Tracker`;
-            bindSettingsUI();
-        } else {
-            outlet.innerHTML = `<div class="notfound"><p class="notfound__code" aria-hidden="true">404</p><h1 class="notfound__heading">Page Not Found</h1><p class="notfound__sub">This page does not exist.</p><a href="#/" class="ds-btn ds-btn--primary">Go Home</a></div>`;
-            document.title = 'Not Found — Job Notification Tracker';
-        }
+  const seg = getSegment(); const outlet = document.getElementById('app-outlet');
+  if (seg === 'dashboard') { renderDashboard(); document.title = 'Dashboard — Job Notification Tracker'; }
+  else if (seg === 'saved') { renderSaved(); document.title = 'Saved — Job Notification Tracker'; }
+  else if (seg === 'digest') { renderDigest(); document.title = 'Digest — Job Notification Tracker'; }
+  else {
+    const route = ROUTES[seg];
+    if (route) {
+      const tpl = document.getElementById(route.tpl);
+      outlet.innerHTML = ''; if (tpl) outlet.appendChild(tpl.content.cloneNode(true));
+      document.title = `${route.title} — Job Notification Tracker`;
+      bindSettingsUI();
+    } else {
+      outlet.innerHTML = `<div class="notfound"><p class="notfound__code" aria-hidden="true">404</p><h1 class="notfound__heading">Page Not Found</h1><p class="notfound__sub">This page does not exist.</p><a href="#/" class="ds-btn ds-btn--primary">Go Home</a></div>`;
+      document.title = 'Not Found — Job Notification Tracker';
     }
-    syncNav(seg); closeMobileDrawer(); window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+  syncNav(seg); closeMobileDrawer(); window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
 function syncNav(seg) { document.querySelectorAll('[data-route]').forEach(l => { const m = l.dataset.route === seg; l.classList.toggle('is-active', m); l.setAttribute('aria-current', m ? 'page' : 'false'); }); }
